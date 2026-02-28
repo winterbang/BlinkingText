@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/editor/editor"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#07c160",
+    "navigationBarTitleText": "文字动画生成器",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#07c160",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/editor/editor",
+        "text": "创作"
+      }
+    ]
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "保存GIF到相册"
+    }
+  }
+}

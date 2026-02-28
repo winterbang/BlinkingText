@@ -1,0 +1,65 @@
+<page-meta root-font-size="system" page-style="overflow: hidden;" />
+<view class="container">
+  <!-- 顶部 Banner -->
+  <view class="banner">
+    <view class="banner-title">文字动画生成器</view>
+    <view class="banner-desc">让文字动起来，创造独特的GIF动画</view>
+  </view>
+
+  <!-- 功能卡片列表 -->
+  <view class="feature-grid">
+    <view class="feature-card" bindtap="goToEditor" data-type="text">
+      <view class="feature-icon text-icon">文</view>
+      <view class="feature-title">文字动画</view>
+      <view class="feature-desc">30+种动画效果</view>
+    </view>
+
+    <view class="feature-card" bindtap="showComingSoon">
+      <view class="feature-icon gif-icon">GIF</view>
+      <view class="feature-title">GIF编辑</view>
+      <view class="feature-desc">编辑现有GIF</view>
+    </view>
+
+    <view class="feature-card" bindtap="showComingSoon">
+      <view class="feature-icon video-icon">视频</view>
+      <view class="feature-title">视频转GIF</view>
+      <view class="feature-desc">视频片段转动画</view>
+    </view>
+
+    <view class="feature-card" bindtap="showComingSoon">
+      <view class="feature-icon template-icon">模板</view>
+      <view class="feature-title">热门模板</view>
+      <view class="feature-desc">一键生成爆款</view>
+    </view>
+  </view>
+
+  <!-- 最近作品 -->
+  <view class="section" wx:if="{{recentWorks.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">最近作品</text>
+      <text class="section-more" bindtap="clearHistory">清空</text>
+    </view>
+
+    <view class="works-list">
+      <view class="work-item" wx:for="{{recentWorks}}" wx:key="id" bindtap="previewWork" data-item="{{item}}">
+        <image class="work-thumb" src="{{item.thumb}}" mode="aspectFill" lazy-load/>
+        <view class="work-info">
+          <text class="work-text">{{item.text}}</text>
+          <text class="work-date">{{item.date}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{recentWorks.length === 0}}">
+    <view class="empty-icon">🎨</view>
+    <text class="empty-text">还没有作品</text>
+    <text class="empty-subtext">点击上方开始创作</text>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-tips">
+    <text class="tips-text">内容已接入微信安全识别</text>
+  </view>
+</view>

@@ -1,0 +1,157 @@
+/* 微信设计规范基础样式 */
+page {
+  --primary: #07c160;
+  --primary-pressed: #06ad56;
+  --primary-disabled: #9edba3;
+  --warn: #fa5151;
+  --warn-pressed: #d94949;
+  --text-primary: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --text-tertiary: rgba(0, 0, 0, 0.3);
+  --bg: #f5f5f5;
+  --bg-white: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg);
+}
+
+/* 微信按钮规范 */
+.btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 32rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  border-radius: 8rpx;
+  border: none;
+  background-color: var(--primary);
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn:active {
+  background-color: var(--primary-pressed);
+}
+
+.btn[disabled] {
+  background-color: var(--primary-disabled);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-plain {
+  background-color: transparent;
+  color: var(--primary);
+  border: 2rpx solid var(--primary);
+}
+
+.btn-plain:active {
+  background-color: rgba(7, 193, 96, 0.1);
+}
+
+/* 微信卡片规范 */
+.card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  margin: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 微信输入框规范 */
+.input {
+  width: 100%;
+  padding: 24rpx 0;
+  font-size: 32rpx;
+  border-bottom: 2rpx solid var(--border);
+  background: transparent;
+}
+
+.input:focus {
+  border-bottom-color: var(--primary);
+}
+
+/* 微信滑动条规范 */
+.slider {
+  margin: 32rpx 0;
+}
+
+/* 通用工具类 */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-2 {
+  gap: 16rpx;
+}
+
+.gap-3 {
+  gap: 24rpx;
+}
+
+.mt-2 {
+  margin-top: 16rpx;
+}
+
+.mt-3 {
+  margin-top: 24rpx;
+}
+
+.mb-2 {
+  margin-bottom: 16rpx;
+}
+
+.mb-3 {
+  margin-bottom: 24rpx;
+}
+
+.text-sm {
+  font-size: 28rpx;
+}
+
+.text-xs {
+  font-size: 24rpx;
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease;
+}

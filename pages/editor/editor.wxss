@@ -1,0 +1,542 @@
+/* 页面容器 */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+/* ==================== 上半部分：画布区域 ==================== */
+.preview-section {
+  height: 45vh;
+  min-height: 360rpx;
+  background: linear-gradient(135deg, #e8e8e8 0%, #f0f0f0 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.canvas-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.canvas-wrapper {
+  position: relative;
+  width: 60vw;
+  height: 60vw;
+  max-width: 280px;
+  max-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.preview-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  background: repeating-conic-gradient(#d0d0d0 0% 25%, transparent 0% 50%) 50% / 20rpx 20rpx;
+}
+
+.canvas-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.loading-spinner {
+  width: 48rpx;
+  height: 48rpx;
+  border: 4rpx solid rgba(7, 193, 96, 0.2);
+  border-top-color: #07c160;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.canvas-actions {
+  position: absolute;
+  bottom: 24rpx;
+  right: 24rpx;
+  display: flex;
+  gap: 20rpx;
+  z-index: 10;
+}
+
+.action-btn {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.action-btn:active {
+  transform: scale(0.9);
+}
+
+.action-icon {
+  font-size: 32rpx;
+}
+
+/* ==================== 下半部分：Tabs 区域 ==================== */
+.tabs-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #f5f5f5;
+}
+
+/* Tabs 导航 */
+.tabs-header {
+  display: flex;
+  background: #ffffff;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx 0;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.tab-item:active {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.tab-item.active {
+  background: rgba(7, 193, 96, 0.05);
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 4rpx;
+  background: #07c160;
+  border-radius: 2rpx;
+}
+
+.tab-text {
+  font-size: 30rpx;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.tab-item.active .tab-text {
+  color: #07c160;
+}
+
+/* Tabs 内容区 */
+.tabs-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+}
+
+.tab-panel.show {
+  display: block;
+}
+
+.tab-panel.hide {
+  display: none;
+}
+
+.panel-inner {
+  padding: 24rpx;
+}
+
+/* ==================== 通用区块样式 ==================== */
+.section {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #000000;
+}
+
+.section-value {
+  font-size: 28rpx;
+  color: #07c160;
+  font-weight: 500;
+}
+
+.section-desc {
+  font-size: 26rpx;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.word-count {
+  font-size: 26rpx;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.section-slider {
+  margin: 0;
+}
+
+/* ==================== Tab 1: 文字 ==================== */
+.text-input {
+  width: 100%;
+  min-height: 160rpx;
+  padding: 24rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.quick-texts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.quick-tag {
+  padding: 16rpx 32rpx;
+  background: rgba(7, 193, 96, 0.1);
+  color: #07c160;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  transition: all 0.2s;
+}
+
+.quick-tag:active {
+  background: #07c160;
+  color: #ffffff;
+}
+
+.align-list {
+  display: flex;
+  gap: 16rpx;
+}
+
+.align-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32rpx 0;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  gap: 12rpx;
+  transition: all 0.2s;
+}
+
+.align-item.active {
+  background: rgba(7, 193, 96, 0.1);
+}
+
+.align-item.active .align-label {
+  color: #07c160;
+}
+
+.align-icon {
+  font-size: 40rpx;
+}
+
+.align-label {
+  font-size: 26rpx;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* ==================== Tab 2: 模板 ==================== */
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx;
+}
+
+.template-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  padding: 20rpx 0;
+  border-radius: 12rpx;
+  background: #f5f5f5;
+  transition: all 0.2s;
+}
+
+.template-card:active {
+  transform: scale(0.95);
+}
+
+.template-card.active {
+  background: rgba(7, 193, 96, 0.1);
+}
+
+.template-card.active .template-name {
+  color: #07c160;
+  font-weight: 500;
+}
+
+.template-card.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.template-icon-box {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.template-icon {
+  font-size: 44rpx;
+}
+
+.template-name {
+  font-size: 24rpx;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* ==================== Tab 3: 样式 ==================== */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20rpx;
+}
+
+.color-block {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 4rpx solid transparent;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.color-block.active {
+  border-color: #07c160;
+  transform: scale(1.1);
+}
+
+.color-block.custom {
+  background: #f5f5f5;
+  font-size: 36rpx;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.color-block.transparent {
+  background: repeating-conic-gradient(#e0e0e0 0% 25%, transparent 0% 50%) 50% / 16rpx 16rpx;
+}
+
+.transparent-text {
+  font-size: 22rpx;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* ==================== Tab 4: 设置 ==================== */
+.size-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.size-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32rpx 0;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  gap: 8rpx;
+  transition: all 0.2s;
+}
+
+.size-block.active {
+  background: #07c160;
+}
+
+.size-block.active .size-label,
+.size-block.active .size-value {
+  color: #ffffff;
+}
+
+.size-label {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.size-value {
+  font-size: 24rpx;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.export-section {
+  margin-top: 48rpx;
+  background: transparent;
+  padding: 0;
+}
+
+.btn-export {
+  width: 100%;
+  height: 96rpx;
+  background: #07c160;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 500;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.3);
+}
+
+.btn-export::after {
+  border: none;
+}
+
+.btn-export[disabled] {
+  background: #9edba3;
+  box-shadow: none;
+}
+
+.btn-export.loading {
+  background: #06ad56;
+}
+
+.btn-export:active {
+  transform: scale(0.98);
+}
+
+/* ==================== 弹窗 ==================== */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.modal-content {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-radius: 24rpx 24rpx 0 0;
+  z-index: 201;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: rgba(0, 0, 0, 0.4);
+  padding: 0 16rpx;
+}
+
+.modal-body {
+  padding: 48rpx;
+}
+
+.modal-body input {
+  width: 100%;
+  padding: 24rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  margin-bottom: 32rpx;
+  box-sizing: border-box;
+}
+
+.btn-confirm {
+  width: 100%;
+  height: 88rpx;
+  background: #07c160;
+  color: #ffffff;
+  font-size: 32rpx;
+  border-radius: 12rpx;
+}
+
+.btn-confirm::after {
+  border: none;
+}

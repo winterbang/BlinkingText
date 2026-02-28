@@ -1,0 +1,314 @@
+<page-meta root-font-size="system" page-style="overflow: hidden;" />
+<view class="container">
+  <!-- 上半部分：画布区域（固定高度） -->
+  <view class="preview-section">
+    <view class="canvas-container">
+      <view class="canvas-wrapper">
+      <canvas
+        type="2d"
+        id="previewCanvas"
+        class="preview-canvas"
+      />
+      <view class="canvas-loading" wx:if="{{isGenerating}}">
+        <view class="loading-spinner"></view>
+        <text class="loading-text">生成中...</text>
+      </view>
+    </view>
+    </view>
+
+    <view class="canvas-actions">
+      <view class="action-btn" bindtap="togglePlay">
+        <text class="action-icon">{{isPlaying ? '⏸' : '▶️'}}</text>
+      </view>
+      <view class="action-btn" bindtap="resetCanvas">
+        <text class="action-icon">🔄</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 下半部分：Tabs 操作区域 -->
+  <view class="tabs-section">
+    <!-- Tabs 导航 -->
+    <view class="tabs-header">
+      <view
+        class="tab-item {{activeTab === 'text' ? 'active' : ''}}"
+        data-tab="text"
+        bindtap="switchTab"
+      >
+        <text class="tab-text">文字</text>
+      </view>
+      <view
+        class="tab-item {{activeTab === 'template' ? 'active' : ''}}"
+        data-tab="template"
+        bindtap="switchTab"
+      >
+        <text class="tab-text">模板</text>
+      </view>
+      <view
+        class="tab-item {{activeTab === 'style' ? 'active' : ''}}"
+        data-tab="style"
+        bindtap="switchTab"
+      >
+        <text class="tab-text">样式</text>
+      </view>
+      <view
+        class="tab-item {{activeTab === 'setting' ? 'active' : ''}}"
+        data-tab="setting"
+        bindtap="switchTab"
+      >
+        <text class="tab-text">设置</text>
+      </view>
+    </view>
+
+    <!-- Tabs 内容区 -->
+    <view class="tabs-content">
+      <!-- Tab 1: 文字 -->
+      <scroll-view
+        class="tab-panel {{activeTab === 'text' ? 'show' : 'hide'}}"
+        scroll-y
+        enhanced
+        show-scrollbar
+      >
+        <view class="panel-inner">
+          <!-- 文字输入 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">文字内容</text>
+              <text class="word-count">{{text.length}}/50</text>
+            </view>
+            <textarea
+              class="text-input"
+              placeholder="请输入文字内容"
+              maxlength="50"
+              auto-height
+              value="{{text}}"
+              bindinput="onTextInput"
+            />
+          </view>
+
+          <!-- 快捷文字 -->
+          <view class="section" wx:if="{{!text}}">
+            <view class="section-header">
+              <text class="section-title">快捷输入</text>
+            </view>
+            <view class="quick-texts">
+              <view
+                class="quick-tag"
+                wx:for="{{quickTexts}}"
+                wx:key="*this"
+                bindtap="setQuickText"
+                data-text="{{item}}"
+              >
+                {{item}}
+              </view>
+            </view>
+          </view>
+
+          <!-- 对齐方式 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">对齐方式</text>
+            </view>
+            <view class="align-list">
+              <view
+                class="align-item {{textAlign === item ? 'active' : ''}}"
+                wx:for="{{['left', 'center', 'right']}}"
+                wx:key="*this"
+                data-align="{{item}}"
+                bindtap="selectTextAlign"
+              >
+                <text class="align-icon">{{item === 'left' ? '⬅️' : item === 'center' ? '⬆️' : '➡️'}}</text>
+                <text class="align-label">{{item === 'left' ? '左对齐' : item === 'center' ? '居中' : '右对齐'}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- Tab 2: 模板 -->
+      <scroll-view
+        class="tab-panel {{activeTab === 'template' ? 'show' : 'hide'}}"
+        scroll-y
+        enhanced
+        show-scrollbar
+      >
+        <view class="panel-inner">
+          <!-- 特效开关 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">动画特效</text>
+              <switch checked="{{enableEffects}}" bindchange="toggleEffects" color="#07c160"/>
+            </view>
+            <text class="section-desc">开启后可以使用动画模板</text>
+          </view>
+
+          <!-- 模板列表 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">选择模板</text>
+            </view>
+            <view class="template-grid">
+              <view
+                class="template-card {{selectedTemplate === item.id ? 'active' : ''}} {{!enableEffects ? 'disabled' : ''}}"
+                wx:for="{{templates}}"
+                wx:key="id"
+                data-id="{{item.id}}"
+                bindtap="selectTemplate"
+              >
+                <view class="template-icon-box" style="background: {{item.previewColor || '#f5f5f5'}}">
+                  <text class="template-icon">{{item.icon}}</text>
+                </view>
+                <text class="template-name">{{item.name}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- Tab 3: 样式 -->
+      <scroll-view
+        class="tab-panel {{activeTab === 'style' ? 'show' : 'hide'}}"
+        scroll-y
+        enhanced
+        show-scrollbar
+      >
+        <view class="panel-inner">
+          <!-- 字号 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">字号大小</text>
+              <text class="section-value">{{fontSize}}px</text>
+            </view>
+            <slider
+              class="section-slider"
+              min="24"
+              max="120"
+              value="{{fontSize}}"
+              block-size="28"
+              activeColor="#07c160"
+              backgroundColor="#e5e5e5"
+              bindchange="onFontSizeChange"
+            />
+          </view>
+
+          <!-- 文字颜色 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">文字颜色</text>
+            </view>
+            <view class="color-grid">
+              <view
+                class="color-block {{color === item ? 'active' : ''}}"
+                wx:for="{{presetColors}}"
+                wx:key="*this"
+                style="background: {{item}}"
+                data-color="{{item}}"
+                bindtap="selectColor"
+              />
+              <view class="color-block custom" bindtap="openColorPicker">
+                <text>+</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 背景颜色 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">背景颜色</text>
+            </view>
+            <view class="color-grid">
+              <view
+                class="color-block {{bgColor === item ? 'active' : ''}} transparent"
+                wx:for="{{bgColors}}"
+                wx:key="*this"
+                style="background: {{item}}"
+                data-color="{{item}}"
+                bindtap="selectBgColor"
+              >
+                <text wx:if="{{item === 'transparent'}}" class="transparent-text">透明</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- Tab 4: 设置 -->
+      <scroll-view
+        class="tab-panel {{activeTab === 'setting' ? 'show' : 'hide'}}"
+        scroll-y
+        enhanced
+        show-scrollbar
+      >
+        <view class="panel-inner">
+          <!-- 动画速度 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">动画速度</text>
+              <text class="section-value">{{speed}}x</text>
+            </view>
+            <slider
+              class="section-slider"
+              min="0.25"
+              max="3"
+              step="0.25"
+              value="{{speed}}"
+              block-size="28"
+              activeColor="#07c160"
+              backgroundColor="#e5e5e5"
+              bindchange="onSpeedChange"
+            />
+          </view>
+
+          <!-- 画布尺寸 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">画布尺寸</text>
+            </view>
+            <view class="size-grid">
+              <view
+                class="size-block {{canvasSize === item.value ? 'active' : ''}}"
+                wx:for="{{canvasSizes}}"
+                wx:key="value"
+                data-value="{{item.value}}"
+                bindtap="selectCanvasSize"
+              >
+                <text class="size-label">{{item.label}}</text>
+                <text class="size-value">{{item.value}}px</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 导出按钮 -->
+          <view class="section export-section">
+            <button
+              class="btn-export {{isGenerating ? 'loading' : ''}}"
+              bindtap="exportGif"
+              disabled="{{isGenerating || !text}}"
+            >
+              <text wx:if="{{!isGenerating}}">生成 GIF</text>
+              <text wx:else>生成中 {{progress}}%</text>
+            </button>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 颜色选择器弹窗 -->
+  <view class="modal-mask" wx:if="{{showColorPicker}}" bindtap="closeColorPicker"></view>
+  <view class="modal-content" wx:if="{{showColorPicker}}">
+    <view class="modal-header">
+      <text class="modal-title">选择颜色</text>
+      <text class="modal-close" bindtap="closeColorPicker">×</text>
+    </view>
+    <view class="modal-body">
+      <input
+        type="text"
+        placeholder="输入颜色代码，如 #07c160"
+        value="{{customColor}}"
+        bindinput="onCustomColorInput"
+      />
+      <button class="btn-confirm" bindtap="confirmCustomColor">确定</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,16 @@
+{
+  "name": "generateGif",
+  "version": "1.0.0",
+  "description": "服务端 GIF 生成",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "wx-server-sdk": "latest",
+    "canvas": "^2.11.2",
+    "gifencoder": "^2.0.1"
+  }
+}
