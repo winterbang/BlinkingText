@@ -497,25 +497,48 @@ Page({
     this.setData({ isGenerating: true, progress: 0 })
 
     try {
-      const gifData = await gifHelper.generateGIF({
-        ...this.data,
-        onProgress: (p) => this.setData({ progress: p })
-      })
-
+      // 使用页面 canvas 直接生成图片
+      const tempFilePath = await this.exportFromCanvas()
+      
       // 保存到历史
-      this.saveToHistory(gifData.tempFilePath)
+      this.saveToHistory(tempFilePath)
+      
+      this.setData({ lastExportPath: tempFilePath })
 
       // 显示操作菜单
-      this.showExportOptions(gifData.tempFilePath)
+      this.showExportOptions(tempFilePath)
     } catch (e) {
       console.error('导出失败', e)
       wx.showToast({
-        title: '导出失败',
+        title: '导出失败: ' + (e.message || '未知错误'),
         icon: 'none'
       })
     } finally {
-      this.setData({ isGenerating: false })
+      this.setData({ isGenerating: false, progress: 0 })
     }
+  },
+
+  // 从 Canvas 导出图片
+  exportFromCanvas() {
+    return new Promise((resolve, reject) => {
+      const { canvasContext } = this.data
+      if (!canvasContext || !canvasContext.canvas) {
+        reject(new Error('Canvas 未初始化'))
+        return
+      }
+
+      // 使用当前画布内容生成图片
+      wx.canvasToTempFilePath({
+        canvas: canvasContext.canvas,
+        success: (res) => {
+          resolve(res.tempFilePath)
+        },
+        fail: (err) => {
+          console.error('Canvas 导出失败', err)
+          reject(err)
+        }
+      })
+    })
   },
 
   // 显示导出选项
