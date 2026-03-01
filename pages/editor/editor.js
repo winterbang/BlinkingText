@@ -52,6 +52,7 @@ Page({
     progress: 0,
     showColorPicker: false,
     customColor: '',
+    lastExportPath: '',
 
     // Canvas
     canvasContext: null,
@@ -501,18 +502,11 @@ Page({
         onProgress: (p) => this.setData({ progress: p })
       })
 
-      // 保存到相册
-      await wx.saveImageToPhotosAlbum({
-        filePath: gifData.tempFilePath
-      })
-
       // 保存到历史
       this.saveToHistory(gifData.tempFilePath)
 
-      wx.showToast({
-        title: '已保存到相册',
-        icon: 'success'
-      })
+      // 显示操作菜单
+      this.showExportOptions(gifData.tempFilePath)
     } catch (e) {
       console.error('导出失败', e)
       wx.showToast({
@@ -522,6 +516,57 @@ Page({
     } finally {
       this.setData({ isGenerating: false })
     }
+  },
+
+  // 显示导出选项
+  showExportOptions(filePath) {
+    wx.showActionSheet({
+      itemList: ['保存到相册', '转发给朋友'],
+      success: (res) => {
+        if (res.tapIndex === 0) {
+          // 保存到相册
+          this.saveToAlbum(filePath)
+        } else if (res.tapIndex === 1) {
+          // 转发给朋友
+          this.shareToFriend(filePath)
+        }
+      }
+    })
+  },
+
+  // 保存到相册
+  async saveToAlbum(filePath) {
+    try {
+      await wx.saveImageToPhotosAlbum({
+        filePath: filePath
+      })
+      wx.showToast({
+        title: '已保存到相册',
+        icon: 'success'
+      })
+    } catch (e) {
+      console.error('保存失败', e)
+      wx.showToast({
+        title: '保存失败',
+        icon: 'none'
+      })
+    }
+  },
+
+  // 转发给朋友
+  shareToFriend(filePath) {
+    // 使用预览图片的方式，让用户可以选择转发
+    wx.previewImage({
+      urls: [filePath],
+      current: filePath,
+      success: () => {
+        // 预览后显示提示
+        wx.showShareMenu({
+          withShareTicket: true,
+          menus: ['shareAppMessage', 'shareTimeline']
+        })
+      }
+    })
   },
 
   // 保存到历史
@@ -543,9 +588,36 @@ Page({
 
   // 分享
   onShareAppMessage() {
-    return {
-      title: `文字动画：${this.data.text}`,
+    const { lastExportPath, text } = this.data
+    const shareObj = {
+      title: `文字动画：${text}`,
       path: '/pages/editor/editor'
     }
+    
+    // 如果有导出的图片，附加图片
+    if (lastExportPath) {
+      shareObj.imageUrl = lastExportPath
+    }
+    
+    return shareObj
+  },
+
+  // 转发给朋友（使用分享功能）
+  shareToFriend(filePath) {
+    // 保存最后导出的路径用于分享
+    this.setData({ lastExportPath: filePath })
+    
+    // 显示分享菜单
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
+    })
+    
+    // 提示用户点击右上角转发
+    wx.showModal({
+      title: '转发给朋友',
+      content: '请点击右上角「...」按钮，选择「转发」发送给好友',
+      showCancel: false
+    })
   }
 })
