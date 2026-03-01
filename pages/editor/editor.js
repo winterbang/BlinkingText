@@ -494,51 +494,133 @@ Page({
 
   // 执行导出
   async doExportGif() {
-    this.setData({ isGenerating: true, progress: 0 })
+    this.setData({ isGenerating: true, progress: 10 })
 
     try {
-      // 使用页面 canvas 直接生成图片
-      const tempFilePath = await this.exportFromCanvas()
+      // 使用云函数生成 GIF
+      const gifUrl = await this.generateGIFWithCloud()
+      
+      this.setData({ progress: 80 })
+      
+      // 下载 GIF 到本地
+      const downloadRes = await wx.downloadFile({
+        url: gifUrl
+      })
+      
+      this.setData({ progress: 90 })
+      
+      const tempFilePath = downloadRes.tempFilePath
       
       // 保存到历史
       this.saveToHistory(tempFilePath)
       
-      this.setData({ lastExportPath: tempFilePath })
+      this.setData({ lastExportPath: tempFilePath, progress: 100 })
 
       // 显示操作菜单
       this.showExportOptions(tempFilePath)
     } catch (e) {
       console.error('导出失败', e)
-      wx.showToast({
-        title: '导出失败: ' + (e.message || '未知错误'),
-        icon: 'none'
-      })
-    } finally {
-      this.setData({ isGenerating: false, progress: 0 })
+      // 降级：导出静态图片
+      this.exportAsPNG()
     }
   },
 
-  // 从 Canvas 导出图片
-  exportFromCanvas() {
-    return new Promise((resolve, reject) => {
+  // 使用云函数生成 GIF
+  async generateGIFWithCloud() {
+    const {
+      text,
+      selectedTemplate,
+      enableEffects,
+      canvasSize,
+      fontSize,
+      color,
+      bgColor,
+      speed,
+      textAlign,
+      isBold,
+      strokeColor,
+      strokeWidth,
+      fontFamily
+    } = this.data
+
+    // 计算帧数
+    const fps = 30
+    const duration = 2000
+    const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
+    
+    // 生成帧延迟数组
+    const frames = []
+    for (let i = 0; i < totalFrames; i++) {
+      frames.push({
+        delay: Math.round(1000 / fps / (speed || 1))
+      })
+    }
+
+    // 调用云函数
+    const result = await wx.cloud.callFunction({
+      name: 'generateGif',
+      data: {
+        frames,
+        width: canvasSize,
+        height: canvasSize,
+        fps,
+        text,
+        options: {
+          fontSize,
+          color,
+          backgroundColor: bgColor,
+          textAlign,
+          isBold,
+          strokeColor,
+          strokeWidth,
+          fontFamily
+        }
+      }
+    })
+
+    if (result.result.code !== 0) {
+      throw new Error(result.result.message || '云函数生成失败')
+    }
+
+    return result.result.tempFilePath || result.result.fileID
+  },
+
+  // 降级：导出静态 PNG
+  async exportAsPNG() {
+    try {
       const { canvasContext } = this.data
       if (!canvasContext || !canvasContext.canvas) {
-        reject(new Error('Canvas 未初始化'))
-        return
+        throw new Error('Canvas 未初始化')
       }
 
-      // 使用当前画布内容生成图片
-      wx.canvasToTempFilePath({
-        canvas: canvasContext.canvas,
-        success: (res) => {
-          resolve(res.tempFilePath)
-        },
-        fail: (err) => {
-          console.error('Canvas 导出失败', err)
-          reject(err)
+      const res = await wx.canvasToTempFilePath({
+        canvas: canvasContext.canvas
+      })
+
+      this.saveToHistory(res.tempFilePath)
+      this.setData({ 
+        lastExportPath: res.tempFilePath, 
+        isGenerating: false,
+        progress: 100 
+      })
+
+      wx.showModal({
+        title: '提示',
+        content: 'GIF 生成需要服务端支持，已为您导出静态图片。是否保存？',
+        success: (modalRes) => {
+          if (modalRes.confirm) {
+            this.showExportOptions(res.tempFilePath)
+          }
         }
       })
-    })
+    } catch (e) {
+      console.error('PNG 导出也失败', e)
+      wx.showToast({
+        title: '导出失败',
+        icon: 'none'
+      })
+      this.setData({ isGenerating: false, progress: 0 })
+    }
   },
 
   // 显示导出选项

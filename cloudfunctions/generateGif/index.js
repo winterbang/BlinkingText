@@ -1,7 +1,4 @@
 // 服务端 GIF 生成云函数
-// 注意：微信小程序云函数对原生模块支持有限
-// 建议使用第三方 GIF 生成服务或预生成方案
-
 const cloud = require('wx-server-sdk')
 
 cloud.init({
@@ -12,30 +9,18 @@ cloud.init({
  * 主函数
  */
 exports.main = async (event, context) => {
-  const { frames, width, height, fps, template, options } = event
+  const { frames, width, height, fps, text, options } = event
 
   try {
-    // 方案1: 调用第三方 GIF 生成 API
-    // const result = await generateWithThirdPartyAPI(frames, width, height, fps)
-
-    // 方案2: 返回预生成的 GIF URL
-    // 实际项目中可以先生成好常用模板的 GIF，然后根据参数返回最接近的
-
-    // 方案3: 返回帧数据，由客户端合成
-    // 小程序客户端可以使用 gif.js 的修改版进行合成
-
+    // 使用服务端渲染生成 GIF
+    const fileID = await generateServerSideGIF(frames, width, height, fps, text, options)
+    
     return {
       code: 0,
       message: 'success',
-      data: {
-        method: 'client-render',
-        frames: frames.length,
-        width,
-        height,
-        fps
-      }
+      fileID: fileID,
+      tempFilePath: fileID
     }
-
   } catch (err) {
     console.error('GIF 生成失败', err)
     return {
@@ -46,65 +31,96 @@ exports.main = async (event, context) => {
 }
 
 /**
- * 使用第三方 API 生成 GIF（示例）
+ * 服务端渲染 GIF
  */
-async function generateWithThirdPartyAPI(frames, width, height, fps) {
-  // 这里可以调用如 Cloudinary, ImgIX 等图像处理服务
-  // 或者自己搭建的 Node.js 服务
-
-  return {
-    url: '',
-    fileID: ''
-  }
-}
-
-/**
- * 服务端渲染 GIF（需要 canvas 和 gifencoder 支持）
- */
-async function generateServerSide(frames, width, height, fps) {
-  // 注意：微信云函数对原生模块支持有限
-  // 以下代码在标准 Node.js 环境中可用
-
-  /*
+async function generateServerSideGIF(frames, width, height, fps, text, options = {}) {
   const { createCanvas } = require('canvas')
   const GIFEncoder = require('gifencoder')
-
+  
   const encoder = new GIFEncoder(width, height)
-  const stream = encoder.createReadStream()
-
+  
+  // 创建 buffer 来存储数据
+  const chunks = []
+  encoder.createReadStream().on('data', chunk => chunks.push(chunk))
+  
   encoder.start()
-  encoder.setRepeat(0)
-  encoder.setDelay(1000 / fps)
-  encoder.setQuality(10)
+  encoder.setRepeat(0) // 循环播放
+  encoder.setDelay(Math.round(1000 / (fps || 30))) // 帧延迟
+  encoder.setQuality(10) // 质量
 
   const canvas = createCanvas(width, height)
   const ctx = canvas.getContext('2d')
+  
+  const { 
+    fontSize = 48, 
+    color = '#000000', 
+    backgroundColor = 'transparent',
+    textAlign = 'center',
+    isBold = false,
+    strokeColor = '',
+    strokeWidth = 0,
+    fontFamily = 'sans-serif'
+  } = options
 
-  for (const frame of frames) {
-    // 绘制帧
-    ctx.fillStyle = frame.backgroundColor || '#ffffff'
-    ctx.fillRect(0, 0, width, height)
-
-    ctx.fillStyle = frame.color || '#000000'
-    ctx.font = `${frame.fontSize || 48}px sans-serif`
-    ctx.textAlign = 'center'
+  // 绘制每一帧
+  for (let i = 0; i < (frames || []).length; i++) {
+    const frame = frames[i]
+    
+    // 清空画布
+    ctx.clearRect(0, 0, width, height)
+    
+    // 绘制背景
+    if (backgroundColor && backgroundColor !== 'transparent') {
+      ctx.fillStyle = backgroundColor
+      ctx.fillRect(0, 0, width, height)
+    }
+    
+    // 设置文字样式
+    ctx.fillStyle = color
+    const weight = isBold ? 'bold' : 'normal'
+    ctx.font = `${weight} ${fontSize}px ${fontFamily}`
     ctx.textBaseline = 'middle'
-    ctx.fillText(frame.text, width / 2, height / 2)
-
+    ctx.textAlign = textAlign
+    
+    let x = width / 2
+    if (textAlign === 'left') {
+      x = 40
+    } else if (textAlign === 'right') {
+      x = width - 40
+    }
+    
+    const y = height / 2
+    
+    // 描边
+    if (strokeColor && strokeWidth > 0) {
+      ctx.strokeStyle = strokeColor
+      ctx.lineWidth = strokeWidth
+      ctx.strokeText(text, x, y)
+    }
+    
+    // 填充文字
+    ctx.fillText(text, x, y)
+    
+    // 添加帧
     encoder.addFrame(ctx)
   }
 
   encoder.finish()
-
+  
+  // 合并 buffer
+  const buffer = Buffer.concat(chunks)
+  
   // 上传到云存储
-  const buffer = stream.read()
+  const cloudPath = `gifs/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.gif`
   const result = await cloud.uploadFile({
-    cloudPath: `gifs/${Date.now()}.gif`,
+    cloudPath: cloudPath,
     fileContent: buffer
   })
-
-  return result.fileID
-  */
-
-  throw new Error('服务端渲染需要额外配置')
+  
+  // 获取临时链接
+  const tempUrl = await cloud.getTempFileURL({
+    fileList: [result.fileID]
+  })
+  
+  return tempUrl.fileList[0].tempFileURL || result.fileID
 }
