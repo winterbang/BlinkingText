@@ -520,37 +520,6 @@ Page({
       this.setData({ isGenerating: false })
     }
   },
-      }
-
-      const res = await wx.canvasToTempFilePath({
-        canvas: canvasContext.canvas
-      })
-
-      this.saveToHistory(res.tempFilePath)
-      this.setData({ 
-        lastExportPath: res.tempFilePath, 
-        isGenerating: false,
-        progress: 100 
-      })
-
-      wx.showModal({
-        title: '提示',
-        content: 'GIF 生成需要服务端支持，已为您导出静态图片。是否保存？',
-        success: (modalRes) => {
-          if (modalRes.confirm) {
-            this.showExportOptions(res.tempFilePath)
-          }
-        }
-      })
-    } catch (e) {
-      console.error('PNG 导出也失败', e)
-      wx.showToast({
-        title: '导出失败',
-        icon: 'none'
-      })
-      this.setData({ isGenerating: false, progress: 0 })
-    }
-  },
 
   // 显示导出选项
   showExportOptions(filePath) {
