@@ -494,103 +494,32 @@ Page({
 
   // 执行导出
   async doExportGif() {
-    this.setData({ isGenerating: true, progress: 10 })
+    this.setData({ isGenerating: true, progress: 0 })
 
     try {
-      // 使用云函数生成 GIF
-      const gifUrl = await this.generateGIFWithCloud()
-      
-      this.setData({ progress: 80 })
-      
-      // 下载 GIF 到本地
-      const downloadRes = await wx.downloadFile({
-        url: gifUrl
+      // 使用本地生成 GIF
+      const gifData = await gifHelper.generateGIF({
+        ...this.data,
+        onProgress: (p) => this.setData({ progress: p })
       })
-      
-      this.setData({ progress: 90 })
-      
-      const tempFilePath = downloadRes.tempFilePath
-      
+
       // 保存到历史
-      this.saveToHistory(tempFilePath)
+      this.saveToHistory(gifData.tempFilePath)
       
-      this.setData({ lastExportPath: tempFilePath, progress: 100 })
+      this.setData({ lastExportPath: gifData.tempFilePath })
 
       // 显示操作菜单
-      this.showExportOptions(tempFilePath)
+      this.showExportOptions(gifData.tempFilePath)
     } catch (e) {
       console.error('导出失败', e)
-      // 降级：导出静态图片
-      this.exportAsPNG()
-    }
-  },
-
-  // 使用云函数生成 GIF
-  async generateGIFWithCloud() {
-    const {
-      text,
-      selectedTemplate,
-      enableEffects,
-      canvasSize,
-      fontSize,
-      color,
-      bgColor,
-      speed,
-      textAlign,
-      isBold,
-      strokeColor,
-      strokeWidth,
-      fontFamily
-    } = this.data
-
-    // 计算帧数
-    const fps = 30
-    const duration = 2000
-    const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
-    
-    // 生成帧延迟数组
-    const frames = []
-    for (let i = 0; i < totalFrames; i++) {
-      frames.push({
-        delay: Math.round(1000 / fps / (speed || 1))
+      wx.showToast({
+        title: '导出失败: ' + (e.message || '未知错误'),
+        icon: 'none'
       })
+    } finally {
+      this.setData({ isGenerating: false })
     }
-
-    // 调用云函数
-    const result = await wx.cloud.callFunction({
-      name: 'generateGif',
-      data: {
-        frames,
-        width: canvasSize,
-        height: canvasSize,
-        fps,
-        text,
-        options: {
-          fontSize,
-          color,
-          backgroundColor: bgColor,
-          textAlign,
-          isBold,
-          strokeColor,
-          strokeWidth,
-          fontFamily
-        }
-      }
-    })
-
-    if (result.result.code !== 0) {
-      throw new Error(result.result.message || '云函数生成失败')
-    }
-
-    return result.result.tempFilePath || result.result.fileID
   },
-
-  // 降级：导出静态 PNG
-  async exportAsPNG() {
-    try {
-      const { canvasContext } = this.data
-      if (!canvasContext || !canvasContext.canvas) {
-        throw new Error('Canvas 未初始化')
       }
 
       const res = await wx.canvasToTempFilePath({

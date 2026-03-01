@@ -1,6 +1,7 @@
-// GIF 生成工具 - 微信小程序适配
+// GIF 生成工具 - 微信小程序本地生成版
 
 const templates = require('./templates.js')
+const { GIFEncoder } = require('./gifEncoder.js')
 
 /**
  * 生成 GIF 动画
@@ -44,6 +45,8 @@ async function generateGIF(options) {
   }
 
   let frames = []
+  if (onProgress) onProgress(10)
+
   if (enableEffects) {
     const template = templates.getTemplate(selectedTemplate)
     if (template) {
@@ -53,14 +56,21 @@ async function generateGIF(options) {
     frames = generateStaticFrames(frameOptions)
   }
 
+  if (onProgress) onProgress(30)
+
   // 应用速度调整
   frames = frames.map(f => ({
     ...f,
     delay: Math.round(f.delay / (speed || 1))
   }))
 
-  // 生成 GIF 数据
-  const gifData = await createGIF(frames, canvasSize, canvasSize, { onProgress })
+  if (onProgress) onProgress(50)
+
+  // 本地生成 GIF
+  const gifData = await createGIFFromFrames(frames, canvasSize, canvasSize, { 
+    fps: 30 / (speed || 1),
+    onProgress 
+  })
 
   return gifData
 }
@@ -69,13 +79,118 @@ async function generateGIF(options) {
  * 生成静态帧
  */
 function generateStaticFrames(options) {
-  const { width, height, fps, duration, text, fontSize, color, backgroundColor, textAlign, isBold, strokeColor, strokeWidth, fontFamily } = options
+  const { width, height, fps, duration } = options
   const frames = []
   const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
   // 创建离屏 Canvas
   const canvas = wx.createOffscreenCanvas({ type: '2d', width, height })
+
+  // 绘制多帧（静态效果，内容相同）
+  for (let i = 0; i < totalFrames; i++) {
+    frames.push({
+      data: null, // 延迟绘制
+      delay: Math.round(1000 / fps),
+      options: { ...options }
+    })
+  }
+
+  return frames
+}
+
+/**
+ * 从帧创建 GIF
+ */
+async function createGIFFromFrames(frames, width, height, options = {}) {
+  const { fps = 30, onProgress } = options
+  
+  if (!frames || frames.length === 0) {
+    throw new Error('没有可用的帧数据')
+  }
+
+  // 限制帧数以控制文件大小和生成时间
+  const maxFrames = 30
+  const step = Math.max(1, Math.floor(frames.length / maxFrames))
+  const selectedFrames = []
+  for (let i = 0; i < frames.length; i += step) {
+    selectedFrames.push(frames[i])
+  }
+
+  if (onProgress) onProgress(60)
+
+  // 创建 GIF 编码器
+  const encoder = new GIFEncoder(width, height)
+  encoder.start()
+  encoder.setRepeat(0) // 循环播放
+  encoder.setDelay(1000 / fps)
+  encoder.setQuality(10)
+
+  // 创建离屏 canvas 用于绘制
+  const canvas = wx.createOffscreenCanvas({ type: '2d', width, height })
   const ctx = canvas.getContext('2d')
+
+  // 编码每一帧
+  for (let i = 0; i < selectedFrames.length; i++) {
+    const frame = selectedFrames[i]
+    
+    // 清空画布
+    ctx.clearRect(0, 0, width, height)
+    
+    // 如果是模板生成的帧，直接使用 canvas
+    if (frame.data && frame.data.getContext) {
+      // 复制模板 canvas 内容
+      ctx.drawImage(frame.data, 0, 0)
+    } else if (frame.options) {
+      // 静态帧，需要绘制
+      drawFrame(ctx, frame.options)
+    }
+
+    // 添加帧到编码器
+    encoder.addFrame(canvas)
+    
+    if (onProgress) {
+      onProgress(60 + Math.round((i + 1) / selectedFrames.length * 30))
+    }
+  }
+
+  // 完成编码
+  const gifBytes = encoder.finish()
+  
+  if (!gifBytes) {
+    throw new Error('GIF 编码失败')
+  }
+
+  if (onProgress) onProgress(95)
+
+  // 保存为临时文件
+  const filePath = await saveBytesToFile(gifBytes, 'gif')
+  
+  if (onProgress) onProgress(100)
+
+  return {
+    tempFilePath: filePath,
+    frames: selectedFrames.length,
+    isGIF: true
+  }
+}
+
+/**
+ * 绘制单帧
+ */
+function drawFrame(ctx, options) {
+  const { 
+    width, 
+    height, 
+    text, 
+    fontSize = 48, 
+    color = '#000000', 
+    backgroundColor = 'transparent',
+    textAlign = 'center',
+    isBold = false,
+    strokeColor = '',
+    strokeWidth = 0,
+    fontFamily = 'sans-serif'
+  } = options
 
   // 绘制背景
   if (backgroundColor && backgroundColor !== 'transparent') {
@@ -83,10 +198,10 @@ function generateStaticFrames(options) {
     ctx.fillRect(0, 0, width, height)
   }
 
-  // 绘制文字
+  // 设置文字样式
   ctx.fillStyle = color
   const weight = isBold ? 'bold' : 'normal'
-  ctx.font = `${weight} ${fontSize}px ${fontFamily || 'sans-serif'}`
+  ctx.font = `${weight} ${fontSize}px ${fontFamily}`
   ctx.textBaseline = 'middle'
   ctx.textAlign = textAlign
 
@@ -97,7 +212,6 @@ function generateStaticFrames(options) {
     x = width - 40
   }
 
-  // 简单处理：直接绘制文字（不换行，静态效果下简化处理）
   const y = height / 2
 
   // 描边
@@ -109,133 +223,42 @@ function generateStaticFrames(options) {
 
   // 填充
   ctx.fillText(text, x, y)
-
-  // 绘制多帧（静态效果）
-  for (let i = 0; i < totalFrames; i++) {
-    frames.push({
-      data: canvas,
-      delay: Math.round(1000 / fps)
-    })
-  }
-
-  return frames
 }
 
 /**
- * 创建 GIF 文件
+ * 将字节数组保存为临时文件
  */
-async function createGIF(frames, width, height, options = {}) {
-  const { onProgress } = options
-
-  // 由于小程序无法直接生成 GIF，我们使用以下策略：
-  // 1. 保存第一帧为预览图片
-  // 2. 尝试调用云函数生成真正的 GIF
-  // 3. 如果云函数不可用，则返回第一帧并提示用户
-
-  const firstFrame = frames[0]
-  if (!firstFrame || !firstFrame.data) {
-    throw new Error('没有可用的帧数据')
-  }
-
-  try {
-    // 尝试将第一帧保存为临时文件
-    const tempRes = await canvasToTempFile(firstFrame.data, 0)
-
-    if (onProgress) {
-      onProgress(50)
-    }
-
-    // 尝试使用云函数生成 GIF
-    try {
-      const gifRes = await generateGIFWithCloud(frames, { width, height, fps: 30 })
-      if (onProgress) {
-        onProgress(100)
-      }
-      return {
-        tempFilePath: gifRes.fileID || gifRes.tempFilePath || tempRes.tempFilePath,
-        framePaths: [tempRes.tempFilePath],
-        frames: frames.length,
-        isGIF: true
-      }
-    } catch (cloudErr) {
-      console.log('云函数生成失败，使用静态图片', cloudErr)
-      // 云函数失败，返回静态图片
-      if (onProgress) {
-        onProgress(100)
-      }
-      return {
-        tempFilePath: tempRes.tempFilePath,
-        framePaths: [tempRes.tempFilePath],
-        frames: frames.length,
-        isGIF: false
-      }
-    }
-  } catch (e) {
-    console.error('创建图片失败', e)
-    throw e
-  }
-}
-
-/**
- * Canvas 转临时文件
- */
-function canvasToTempFile(canvas, index) {
+function saveBytesToFile(bytes, extension = 'bin') {
   return new Promise((resolve, reject) => {
     try {
-      // 小程序离屏 canvas 使用 toDataURL
-      if (canvas && canvas.toDataURL) {
-        const dataURL = canvas.toDataURL('image/png')
-        const fs = wx.getFileSystemManager()
-        const filePath = `${wx.env.USER_DATA_PATH}/frame_${index}_${Date.now()}.png`
-
-        // 将 base64 写入文件
-        const base64 = dataURL.replace(/^data:image\/\w+;base64,/, '')
-        fs.writeFile({
-          filePath,
-          data: base64,
-          encoding: 'base64',
-          success: () => resolve({ tempFilePath: filePath }),
-          fail: (err) => {
-            console.error('写入文件失败', err)
-            reject(err)
-          }
-        })
-      } else {
-        reject(new Error('Canvas 不支持 toDataURL'))
+      const fs = wx.getFileSystemManager()
+      const filePath = `${wx.env.USER_DATA_PATH}/output_${Date.now()}.${extension}`
+      
+      // 将 Uint8Array 转为 base64
+      let binary = ''
+      const len = bytes.length
+      for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i])
       }
+      const base64 = wx.arrayBufferToBase64(bytes.buffer || bytes)
+      
+      fs.writeFile({
+        filePath,
+        data: base64,
+        encoding: 'base64',
+        success: () => resolve(filePath),
+        fail: (err) => {
+          console.error('写入文件失败', err)
+          reject(err)
+        }
+      })
     } catch (e) {
-      console.error('Canvas 转临时文件失败', e)
+      console.error('保存文件失败', e)
       reject(e)
     }
   })
 }
 
-/**
- * 使用云函数生成 GIF
- */
-async function generateGIFWithCloud(frames, options) {
-  // 上传帧到云存储
-  // 调用云函数合成 GIF
-  // 返回 GIF 文件 ID
-
-  const { width, height, fps } = options
-
-  const result = await wx.cloud.callFunction({
-    name: 'generateGif',
-    data: {
-      frames: frames.map(f => ({
-        delay: f.delay
-      })),
-      width,
-      height,
-      fps
-    }
-  })
-
-  return result.result
-}
-
 module.exports = {
-  generateGIF,
-  generateGIFWithCloud
+  generateGIF
 }
