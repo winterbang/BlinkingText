@@ -297,17 +297,7 @@
               </view>
             </view>
           </view>
-        </view>
-      </scroll-view>
 
-      <!-- Tab 4: 设置 -->
-      <scroll-view
-        class="tab-panel {{activeTab === 'setting' ? 'show' : 'hide'}}"
-        scroll-y
-        enhanced
-        show-scrollbar
-      >
-        <view class="panel-inner">
           <!-- 动画速度 -->
           <view class="section">
             <view class="section-header">
@@ -326,7 +316,17 @@
               bindchange="onSpeedChange"
             />
           </view>
+        </view>
+      </scroll-view>
 
+      <!-- Tab 4: 设置 -->
+      <scroll-view
+        class="tab-panel {{activeTab === 'setting' ? 'show' : 'hide'}}"
+        scroll-y
+        enhanced
+        show-scrollbar
+      >
+        <view class="panel-inner">
           <!-- 画布尺寸 -->
           <view class="section">
             <view class="section-header">

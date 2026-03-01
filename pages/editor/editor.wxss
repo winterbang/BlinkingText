@@ -186,7 +186,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28rpx 0;
+  padding: 16rpx 0;
   position: relative;
   transition: all 0.2s;
 }
@@ -212,7 +212,7 @@
 }
 
 .tab-text {
-  font-size: 30rpx;
+  font-size: 26rpx;
   color: rgba(0, 0, 0, 0.6);
   font-weight: 500;
 }
