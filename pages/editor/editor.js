@@ -233,26 +233,34 @@ Page({
     })
   },
 
-  // 文字换行
+  // 文字换行（支持手动换行和自动换行）
   wrapText(ctx, text, maxWidth) {
-    const chars = text.split('')
-    const lines = []
-    let currentLine = ''
+    // 先按手动换行符分割成段落
+    const paragraphs = text.split('\n')
+    const allLines = []
 
-    for (let i = 0; i < chars.length; i++) {
-      const testLine = currentLine + chars[i]
-      const metrics = ctx.measureText(testLine)
+    for (const paragraph of paragraphs) {
+      const chars = paragraph.split('')
+      const lines = []
+      let currentLine = ''
 
-      if (metrics.width > maxWidth && currentLine !== '') {
-        lines.push(currentLine)
-        currentLine = chars[i]
-      } else {
-        currentLine = testLine
+      for (let i = 0; i < chars.length; i++) {
+        const testLine = currentLine + chars[i]
+        const metrics = ctx.measureText(testLine)
+
+        if (metrics.width > maxWidth && currentLine !== '') {
+          lines.push(currentLine)
+          currentLine = chars[i]
+        } else {
+          currentLine = testLine
+        }
       }
+
+      lines.push(currentLine)
+      allLines.push(...lines)
     }
 
-    lines.push(currentLine)
-    return lines
+    return allLines
   },
 
   // 文本输入

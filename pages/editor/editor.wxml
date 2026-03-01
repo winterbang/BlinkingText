@@ -83,7 +83,7 @@
             </view>
             <textarea
               class="text-input"
-              placeholder="请输入文字内容"
+              placeholder="请输入文字内容，换行请输入回车"
               maxlength="20"
               auto-height
               value="{{text}}"
