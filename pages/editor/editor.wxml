@@ -248,6 +248,25 @@
             <text class="section-desc">开启后可以使用动画模板</text>
           </view>
 
+          <!-- 动画速度 -->
+          <view class="section" wx:if="{{enableEffects}}">
+            <view class="section-header">
+              <text class="section-title">动画速度</text>
+              <text class="section-value">{{speed}}x</text>
+            </view>
+            <slider
+              class="section-slider"
+              min="0.25"
+              max="3"
+              step="0.25"
+              value="{{speed}}"
+              block-size="28"
+              activeColor="#07c160"
+              backgroundColor="#e5e5e5"
+              bindchange="onSpeedChange"
+            />
+          </view>
+
           <!-- 模板列表 -->
           <view class="section">
             <view class="section-header">
@@ -267,25 +286,6 @@
                 <text class="template-name">{{item.name}}</text>
               </view>
             </view>
-          </view>
-
-          <!-- 动画速度 -->
-          <view class="section" wx:if="{{enableEffects}}">
-            <view class="section-header">
-              <text class="section-title">动画速度</text>
-              <text class="section-value">{{speed}}x</text>
-            </view>
-            <slider
-              class="section-slider"
-              min="0.25"
-              max="3"
-              step="0.25"
-              value="{{speed}}"
-              block-size="28"
-              activeColor="#07c160"
-              backgroundColor="#e5e5e5"
-              bindchange="onSpeedChange"
-            />
           </view>
         </view>
       </scroll-view>
