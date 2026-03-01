@@ -27,7 +27,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 24rpx;
   padding: 32rpx;
-  margin-top: -32rpx;
+  margin-top: 24rpx;
 }
 
 .feature-card {
@@ -36,6 +36,12 @@
   padding: 32rpx;
   box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
   transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 200rpx;
 }
 
 .feature-card:active {
