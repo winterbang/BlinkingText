@@ -268,6 +268,25 @@
               </view>
             </view>
           </view>
+
+          <!-- 动画速度 -->
+          <view class="section" wx:if="{{enableEffects}}">
+            <view class="section-header">
+              <text class="section-title">动画速度</text>
+              <text class="section-value">{{speed}}x</text>
+            </view>
+            <slider
+              class="section-slider"
+              min="0.25"
+              max="3"
+              step="0.25"
+              value="{{speed}}"
+              block-size="28"
+              activeColor="#07c160"
+              backgroundColor="#e5e5e5"
+              bindchange="onSpeedChange"
+            />
+          </view>
         </view>
       </scroll-view>
 
@@ -296,25 +315,6 @@
                 <text wx:if="{{item === 'transparent'}}" class="transparent-text">透明</text>
               </view>
             </view>
-          </view>
-
-          <!-- 动画速度 -->
-          <view class="section">
-            <view class="section-header">
-              <text class="section-title">动画速度</text>
-              <text class="section-value">{{speed}}x</text>
-            </view>
-            <slider
-              class="section-slider"
-              min="0.25"
-              max="3"
-              step="0.25"
-              value="{{speed}}"
-              block-size="28"
-              activeColor="#07c160"
-              backgroundColor="#e5e5e5"
-              bindchange="onSpeedChange"
-            />
           </view>
         </view>
       </scroll-view>
