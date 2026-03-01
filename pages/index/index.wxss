@@ -1,6 +1,8 @@
 .container {
   min-height: 100vh;
   padding-bottom: 48rpx;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Banner */
@@ -128,6 +130,10 @@
 /* Section */
 .section {
   margin-top: 32rpx;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .section-header {
@@ -152,6 +158,8 @@
 /* Works List */
 .works-list {
   padding: 0 32rpx;
+  max-height: 600rpx;
+  overflow-y: auto;
 }
 
 .work-item {
