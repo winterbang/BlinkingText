@@ -109,6 +109,61 @@
   font-size: 32rpx;
 }
 
+.action-icon-img {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+/* Tab 图标 */
+.tab-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-bottom: 8rpx;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0 16rpx 0;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.tab-icon {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.tab-item.active .tab-icon {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.tab-item.active .tab-icon {
+  stroke: #07c160;
+}
+
+/* 对齐图标 */
+.align-icon-img {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.align-item .align-icon {
+  width: 40rpx;
+  height: 40rpx;
+  filter: grayscale(100%);
+  opacity: 0.6;
+}
+
+.align-item.active .align-icon {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
 /* ==================== 下半部分：Tabs 区域 ==================== */
 .tabs-section {
   flex: 1;

@@ -9,25 +9,33 @@
   <!-- 功能卡片列表 -->
   <view class="feature-grid">
     <view class="feature-card" bindtap="goToEditor" data-type="text">
-      <view class="feature-icon text-icon">文</view>
+      <view class="feature-icon text-icon">
+        <image class="lucide-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQgN1Y0aDE2djMiLz48cGF0aCBkPSJNOSAyMGg2Ii8+PHBhdGggZD0iTTEyIDR2MTYiLz48L3N2Zz4=" mode="aspectFit"/>
+      </view>
       <view class="feature-title">文字动画</view>
       <view class="feature-desc">30+种动画效果</view>
     </view>
 
     <view class="feature-card" bindtap="showComingSoon">
-      <view class="feature-icon gif-icon">GIF</view>
+      <view class="feature-icon gif-icon">
+        <image class="lucide-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3Qgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiB4PSIzIiB5PSIzIiByeD0iMiIgcnk9IjIiLz48Y2lyY2xlIGN4PSI5IiBjeT0iOSIgcj0iMiIvPjxwYXRoIGQ9Im0yMSAxNS0zLjA4Ni0zLjA4NmEyIDIgMCAwIDAtMi44MjggMEw2IDIxIi8+PC9zdmc+" mode="aspectFit"/>
+      </view>
       <view class="feature-title">GIF编辑</view>
       <view class="feature-desc">编辑现有GIF</view>
     </view>
 
     <view class="feature-card" bindtap="showComingSoon">
-      <view class="feature-icon video-icon">视频</view>
+      <view class="feature-icon video-icon">
+        <image class="lucide-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0ibTIyIDgtNiA0IDYgNFY4WiIvPjxyZWN0IHdpZHRoPSIxNCIgaGVpZ2h0PSIxMiIgeD0iMiIgeT0iNiIgcng9IjIiIHJ5PSIyIi8+PC9zdmc+" mode="aspectFit"/>
+      </view>
       <view class="feature-title">视频转GIF</view>
       <view class="feature-desc">视频片段转动画</view>
     </view>
 
     <view class="feature-card" bindtap="showComingSoon">
-      <view class="feature-icon template-icon">模板</view>
+      <view class="feature-icon template-icon">
+        <image class="lucide-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3Qgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiB4PSIzIiB5PSIzIiByeD0iMiIgcnk9IjIiLz48bGluZSB4MT0iMyIgeDI9IjIxIiB5MT0iOSIgeTI9IjkiLz48bGluZSB4MT0iOSIgeDI9IjkiIHkxPSIyMSIgeTI9IjkiLz48L3N2Zz4=" mode="aspectFit"/>
+      </view>
       <view class="feature-title">热门模板</view>
       <view class="feature-desc">一键生成爆款</view>
     </view>
@@ -36,8 +44,14 @@
   <!-- 最近作品 -->
   <view class="section" wx:if="{{recentWorks.length > 0}}">
     <view class="section-header">
-      <text class="section-title">最近作品</text>
-      <text class="section-more" bindtap="clearHistory">清空</text>
+      <view class="section-title-wrapper">
+        <image class="section-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM2NjYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIvPjxwb2x5bGluZSBwb2ludHM9IjEyIDYgMTIgMTIgMTYgMTQiLz48L3N2Zz4=" mode="aspectFit"/>
+        <text class="section-title">最近作品</text>
+      </view>
+      <view class="section-more" bindtap="clearHistory">
+        <image class="action-icon-small" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNCIgaGVpZ2h0PSIxNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5OTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMyA2aDE4Ii8+PHBhdGggZD0iTTE5IDZ2MTRjMCAxLTEgMi0yIDJIN2MtMSAwLTItMS0yLTJWNiIvPjxwYXRoIGQ9Ik04IDZWNEMwLTEgMS0yIDItMmg0YzEgMCAyIDEgMiAydjIiLz48L3N2Zz4=" mode="aspectFit"/>
+        <text>清空</text>
+      </view>
     </view>
 
     <view class="works-list">
@@ -53,7 +67,9 @@
 
   <!-- 空状态 -->
   <view class="empty-state" wx:if="{{recentWorks.length === 0}}">
-    <view class="empty-icon">🎨</view>
+    <view class="empty-icon">
+      <image class="lucide-icon-large" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEzLjUiIGN5PSI2LjUiIHI9Ii41IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48Y2lyY2xlIGN4PSIxNy41IiBjeT0iMTAuNSIgcj0iLjUiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjxjaXJjbGUgY3g9IjguNSIgY3k9IjcuNSIgcj0iLjUiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjxjaXJjbGUgY3g9IjYuNSIgY3k9IjEyLjUiIHI9Ii41IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48cGF0aCBkPSJNMTIgMkM2LjUgMiAyIDYuNSAyIDEyczQuNSAxMCAxMCAxMGMuOTI2IDAgMS42NDgtLjc0NiAxLjY0OC0xLjY4OCAwLS40MzctLjE4LS44MzUtLjQzNy0xLjEyNS0uMjktLjI4OS0uNDM4LS42NTItLjQzOC0xLjEyNWExLjY0IDEuNjQgMCAwIDEgMS42NjgtMS42NjhoMS45OTZjMy4wNTEgMCA1LjU1NS0yLjUwMyA1LjU1NS01LjU1NEMyMS45NjUgNi4wMTIgMTcuNDYxIDIgMTIgMnoiLz48L3N2Zz4=" mode="aspectFit"/>
+    </view>
     <text class="empty-text">还没有作品</text>
     <text class="empty-subtext">点击上方开始创作</text>
   </view>

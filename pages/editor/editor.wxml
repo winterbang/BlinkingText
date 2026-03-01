@@ -18,10 +18,11 @@
 
     <view class="canvas-actions">
       <view class="action-btn" bindtap="togglePlay">
-        <text class="action-icon">{{isPlaying ? '⏸' : '▶️'}}</text>
+        <image class="action-icon-img" wx:if="{{isPlaying}}" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSIxNiIgeD0iNiIgeT0iNCIvPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB4PSIxNCIgeT0iNCIvPjwvc3ZnPg==" mode="aspectFit"/>
+        <image class="action-icon-img" wx:else src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWdvbiBwb2ludHM9IjUgMyAxOSAxMiA1IDIxIDUgMyIvPjwvc3ZnPg==" mode="aspectFit"/>
       </view>
       <view class="action-btn" bindtap="resetCanvas">
-        <text class="action-icon">🔄</text>
+        <image class="action-icon-img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMyAxMmE5IDkgMCAwIDEgOS05IDkuNzUgOS43NSAwIDAgMSA2Ljc0IDIuNzRMMjEgOCIvPjxwYXRoIGQ9Ik0yMSAzdjVoLTUiLz48cGF0aCBkPSJNMjEgMTJhOSA5IDAgMCAxLTkgOSA5Ljc1IDkuNzUgMCAwIDEtNi43NC0yLjc0TDMgMTYiLz48cGF0aCBkPSJNOCAxNkgzdjUiLz48L3N2Zz4=" mode="aspectFit"/>
       </view>
     </view>
   </view>
@@ -35,6 +36,7 @@
         data-tab="text"
         bindtap="switchTab"
       >
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5bGluZSBwb2ludHM9IjQgNyA0IDQgMjAgNCAyMCA3Ii8+PGxpbmUgeDE9IjkiIHgyPSIxNSIgeTE9IjIwIiB5Mj0iMjAiLz48bGluZSB4MT0iMTIiIHgyPSIxMiIgeTE9IjQiIHkyPSIyMCIvPjwvc3ZnPg==" mode="aspectFit"/>
         <text class="tab-text">文字</text>
       </view>
       <view
@@ -42,6 +44,7 @@
         data-tab="template"
         bindtap="switchTab"
       >
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAybC0xLjkxMiA1LjgxM2EyIDIgMCAwIDEtMS4yNzUgMS4yNzVMMyAxMmw1LjgxMyAxLjkxMmEyIDIgMCAwIDEgMS4yNzUgMS4yNzVMMTIgMjFsMS45MTItNS44MTNhMiAyIDAgMCAxIDEuMjc1LTEuMjc1TDIxIDEybC01LjgxMy0xLjkxMmEyIDIgMCAwIDEtMS4yNzUtMS4yNzVMMTIgMloiLz48L3N2Zz4=" mode="aspectFit"/>
         <text class="tab-text">模板</text>
       </view>
       <view
@@ -49,6 +52,7 @@
         data-tab="style"
         bindtap="switchTab"
       >
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAyQzYuNSAyIDIgNi41IDIgMTJzNC41IDEwIDEwIDEwYy45MjYgMCAxLjY0OC0uNzQ2IDEuNjQ4LTEuNjg4IDAtLjQzNy0uMTgtLjgzNS0uNDM3LTEuMTI1LS4yOS0uMjg5LS40MzgtLjY1Mi0uNDM4LTEuMTI1YTEuNjQgMS42NCAwIDAgMSAxLjY2OC0xLjY2OGgxLjk5NmMzLjA1MSAwIDUuNTU1LTIuNTAzIDUuNTU1LTUuNTU0QzIxLjk2NSA2LjAxMiAxNy40NjEgMiAxMiAyeiIvPjwvc3ZnPg==" mode="aspectFit"/>
         <text class="tab-text">样式</text>
       </view>
       <view
@@ -56,6 +60,7 @@
         data-tab="setting"
         bindtap="switchTab"
       >
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMi4yMiAyaC0uNDRhMiAyIDAgMCAwLTIgMnYuMThhMiAyIDAgMCAxLTEgMS43M2wtLjQzLjI1YTIgMiAwIDAgMS0yIDBsLS4xNS0uMDhhMiAyIDAgMCAwLTIuNzMuNzNsLS4yMi4zOGEyIDIgMCAwIDAgLjczIDIuNzNsLjE1LjFhMiAyIDAgMCAxIDEgMS43MnYuNTFhMiAyIDAgMCAxLTEgMS43NGwtLjE1LjA5YTIgMiAwIDAgMC0uNzMgMi43M2wuMjIuMzhhMiAyIDAgMCAwIDIuNzMuNzNsLjE1LS4wOGEyIDIgMCAwIDEgMiAwbC40My4yNWEyIDIgMCAwIDEgMSAxLjczVjIwYTIgMiAwIDAgMCAyIDJoLjQ0YTIgMiAwIDAgMCAyLTJ2LS4xOGEyIDIgMCAwIDEgMS0xLjczbC40My0uMjVhMiAyIDAgMCAxIDIgMGwuMTUuMDhhMiAyIDAgMCAwIDIuNzMtLjczbC4yMi0uMzlhMiAyIDAgMCAwLS43My0yLjczbC0uMTUtLjA4YTIgMiAwIDAgMS0xLTEuNzR2LS41YTIgMiAwIDAgMSAxLTEuNzRsLjE1LS4wOWEyIDIgMCAwIDAgLjczLTIuNzNsLS4yMi0uMzhhMiAyIDAgMCAwLTIuNzMtLjczbC0uMTUuMDhhMiAyIDAgMCAxLTIgMGwtLjQzLS4yNWEyIDIgMCAwIDEtMS0xLjczVjRhMiAyIDAgMCAwLTItMnoiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIzIi8+PC9zdmc+" mode="aspectFit"/>
         <text class="tab-text">设置</text>
       </view>
     </view>
@@ -111,14 +116,28 @@
             </view>
             <view class="align-list">
               <view
-                class="align-item {{textAlign === item ? 'active' : ''}}"
-                wx:for="{{['left', 'center', 'right']}}"
-                wx:key="*this"
-                data-align="{{item}}"
+                class="align-item {{textAlign === 'left' ? 'active' : ''}}"
+                data-align="left"
                 bindtap="selectTextAlign"
               >
-                <text class="align-icon">{{item === 'left' ? '⬅️' : item === 'center' ? '⬆️' : '➡️'}}</text>
-                <text class="align-label">{{item === 'left' ? '左对齐' : item === 'center' ? '居中' : '右对齐'}}</text>
+                <image class="align-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxsaW5lIHgxPSIyMSIgeDI9IjMiIHkxPSI2IiB5Mj0iNiIvPjxsaW5lIHgxPSIxNSIgeDI9IjMiIHkxPSIxMiIgeTI9IjEyIi8+PGxpbmUgeDE9IjE3IiB4Mj0iMyIgeTE9IjE4IiB5Mj0iMTgiLz48L3N2Zz4=" mode="aspectFit"/>
+                <text class="align-label">左对齐</text>
+              </view>
+              <view
+                class="align-item {{textAlign === 'center' ? 'active' : ''}}"
+                data-align="center"
+                bindtap="selectTextAlign"
+              >
+                <image class="align-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxsaW5lIHgxPSIyMSIgeDI9IjMiIHkxPSI2IiB5Mj0iNiIvPjxsaW5lIHgxPSIxNyIgeDI9IjciIHkxPSIxMiIgeTI9IjEyIi8+PGxpbmUgeDE9IjE5IiB4Mj0iNSIgeTE9IjE4IiB5Mj0iMTgiLz48L3N2Zz4=" mode="aspectFit"/>
+                <text class="align-label">居中</text>
+              </view>
+              <view
+                class="align-item {{textAlign === 'right' ? 'active' : ''}}"
+                data-align="right"
+                bindtap="selectTextAlign"
+              >
+                <image class="align-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxsaW5lIHgxPSIyMSIgeDI9IjMiIHkxPSI2IiB5Mj0iNiIvPjxsaW5lIHgxPSIyMSIgeDI9IjkiIHkxPSIxMiIgeTI9IjEyIi8+PGxpbmUgeDE9IjIxIiB4Mj0iNyIgeTE9IjE4IiB5Mj0iMTgiLz48L3N2Zz4=" mode="aspectFit"/>
+                <text class="align-label">右对齐</text>
               </view>
             </view>
           </view>
