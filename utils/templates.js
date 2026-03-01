@@ -39,18 +39,22 @@ function wrapText(ctx, text, maxWidth) {
   return allLines
 }
 
-// 绘制多行文字（支持换行）
+// 绘制多行文字（支持换行、加粗、描边）
 function drawWrappedText(ctx, text, x, y, maxWidth, options = {}) {
   const {
     fontSize = 48,
     color = '#000000',
     textAlign = 'center',
     fontWeight = 'normal',
-    lineHeight = 1.2
+    lineHeight = 1.2,
+    isBold = false,
+    strokeColor = '',
+    strokeWidth = 0
   } = options
 
   ctx.fillStyle = color
-  ctx.font = `${fontWeight} ${fontSize}px sans-serif`
+  const weight = isBold ? 'bold' : fontWeight
+  ctx.font = `${weight} ${fontSize}px sans-serif`
   ctx.textBaseline = 'middle'
   ctx.textAlign = textAlign
 
@@ -60,7 +64,17 @@ function drawWrappedText(ctx, text, x, y, maxWidth, options = {}) {
   const startY = y - totalHeight / 2 + lh / 2
 
   lines.forEach((line, index) => {
-    ctx.fillText(line, x, startY + index * lh)
+    const lineY = startY + index * lh
+    
+    // 绘制描边
+    if (strokeColor && strokeWidth > 0) {
+      ctx.strokeStyle = strokeColor
+      ctx.lineWidth = strokeWidth
+      ctx.strokeText(line, x, lineY)
+    }
+    
+    // 绘制填充
+    ctx.fillText(line, x, lineY)
   })
 }
 
@@ -87,7 +101,7 @@ const fadeTemplate = {
   icon: '✨',
   previewColor: '#fef3c7',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const midFrame = Math.floor(totalFrames / 2)
@@ -114,7 +128,7 @@ const fadeTemplate = {
       // 文字（支持换行）
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
 
       ctx.globalAlpha = 1
 
@@ -135,7 +149,7 @@ const bounceTemplate = {
   icon: '⬆️',
   previewColor: '#d1fae5',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -153,7 +167,7 @@ const bounceTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2 - bounce, maxTextWidth, { fontSize, color, textAlign })
+      drawWrappedText(ctx, text, x, height / 2 - bounce, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
 
       frames.push({
         data: canvas,
@@ -172,7 +186,7 @@ const scaleTemplate = {
   icon: '🔍',
   previewColor: '#dbeafe',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -194,7 +208,7 @@ const scaleTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
 
       ctx.restore()
 
@@ -215,7 +229,7 @@ const rotateTemplate = {
   icon: '↻',
   previewColor: '#fce7f3',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -258,7 +272,7 @@ const typewriterTemplate = {
   icon: '⌨️',
   previewColor: '#e0e7ff',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const chars = text.split('')
@@ -278,7 +292,7 @@ const typewriterTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, currentText, x, height / 2, maxTextWidth, { fontSize, color, textAlign })
+      drawWrappedText(ctx, currentText, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
 
       frames.push({
         data: canvas,
@@ -297,7 +311,7 @@ const blinkTemplate = {
   icon: '✨',
   previewColor: '#fef9c3',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -336,7 +350,7 @@ const shakeTemplate = {
   icon: '📳',
   previewColor: '#fecaca',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -355,7 +369,7 @@ const shakeTemplate = {
 
       const x = textAlign === 'left' ? 40 + offsetX : textAlign === 'right' ? width - 40 + offsetX : width / 2 + offsetX
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2 + offsetY, maxTextWidth, { fontSize, color, textAlign })
+      drawWrappedText(ctx, text, x, height / 2 + offsetY, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
 
       frames.push({
         data: canvas,
@@ -374,7 +388,7 @@ const rainbowTemplate = {
   icon: '🌈',
   previewColor: '#fce7f3',
   generateFrames(options) {
-    const { text, width, height, fontSize, backgroundColor, fps, duration, textAlign } = options
+    const { text, width, height, fontSize, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899']
@@ -393,7 +407,7 @@ const rainbowTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color: colors[colorIndex], textAlign })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color: colors[colorIndex], textAlign, isBold, strokeColor, strokeWidth })
 
       frames.push({
         data: canvas,

@@ -21,6 +21,9 @@ Page({
     fontSize: 48,
     color: '#000000',
     bgColor: 'transparent',
+    isBold: false,
+    strokeColor: '',
+    strokeWidth: 0,
     presetColors: ['#000000', '#ffffff', '#07c160', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
     bgColors: ['transparent', '#ffffff', '#000000', '#f5f5f5', '#fee2e2', '#fef3c7', '#d1fae5', '#dbeafe'],
 
@@ -88,7 +91,7 @@ Page({
 
   // 生成预览帧
   async generatePreview() {
-    const { text, selectedTemplate, enableEffects, canvasSize, fontSize, color, bgColor, speed, textAlign } = this.data
+    const { text, selectedTemplate, enableEffects, canvasSize, fontSize, color, bgColor, speed, textAlign, isBold, strokeColor, strokeWidth } = this.data
 
     if (!text || !this.data.canvasContext) return
 
@@ -101,6 +104,9 @@ Page({
       backgroundColor: bgColor,
       speed,
       textAlign,
+      isBold,
+      strokeColor,
+      strokeWidth,
       fps: 30,
       duration: 2000
     }
@@ -176,7 +182,7 @@ Page({
 
   // 绘制单帧
   drawFrame(frameData) {
-    const { canvasContext, text, selectedTemplate, enableEffects, canvasSize, fontSize, color, bgColor, textAlign } = this.data
+    const { canvasContext, text, selectedTemplate, enableEffects, canvasSize, fontSize, color, bgColor, textAlign, isBold, strokeColor, strokeWidth } = this.data
     if (!canvasContext) return
 
     const { ctx } = canvasContext
@@ -198,14 +204,14 @@ Page({
       ctx.drawImage(frameData.data, 0, 0, width, height)
     } else {
       // 实时绘制
-      this.drawTextFrame(ctx, text, width, height, fontSize, color, textAlign)
+      this.drawTextFrame(ctx, text, width, height, fontSize, color, textAlign, isBold, strokeColor, strokeWidth)
     }
   },
 
   // 绘制文字帧
-  drawTextFrame(ctx, text, width, height, fontSize, color, align) {
+  drawTextFrame(ctx, text, width, height, fontSize, color, align, isBold, strokeColor, strokeWidth) {
     ctx.fillStyle = color
-    ctx.font = `${fontSize}px sans-serif`
+    ctx.font = `${isBold ? 'bold ' : ''}${fontSize}px sans-serif`
     ctx.textBaseline = 'middle'
 
     // 文字对齐
@@ -229,7 +235,17 @@ Page({
     const startY = y - totalHeight / 2 + lineHeight / 2
 
     lines.forEach((line, index) => {
-      ctx.fillText(line, x, startY + index * lineHeight)
+      const lineY = startY + index * lineHeight
+      
+      // 绘制描边
+      if (strokeColor && strokeWidth > 0) {
+        ctx.strokeStyle = strokeColor
+        ctx.lineWidth = strokeWidth
+        ctx.strokeText(line, x, lineY)
+      }
+      
+      // 绘制填充
+      ctx.fillText(line, x, lineY)
     })
   },
 
@@ -381,6 +397,24 @@ Page({
         icon: 'none'
       })
     }
+  },
+
+  // 切换加粗
+  toggleBold() {
+    this.setData({ isBold: !this.data.isBold })
+    this.generatePreview()
+  },
+
+  // 选择描边颜色
+  selectStrokeColor(e) {
+    this.setData({ strokeColor: e.currentTarget.dataset.color })
+    this.generatePreview()
+  },
+
+  // 描边宽度变化
+  onStrokeWidthChange(e) {
+    this.setData({ strokeWidth: e.detail.value })
+    this.debounceGenerate()
   },
 
   // 速度变化

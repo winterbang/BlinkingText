@@ -147,6 +147,55 @@
             </view>
           </view>
 
+          <!-- 加粗 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">文字加粗</text>
+              <switch checked="{{isBold}}" bindchange="toggleBold" color="#07c160"/>
+            </view>
+          </view>
+
+          <!-- 文字描边 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">描边颜色</text>
+            </view>
+            <view class="color-grid">
+              <view
+                class="color-block {{strokeColor === item ? 'active' : ''}}"
+                wx:for="{{presetColors}}"
+                wx:key="*this"
+                style="background: {{item}}"
+                data-color="{{item}}"
+                bindtap="selectStrokeColor"
+              />
+              <view
+                class="color-block {{strokeColor === '' ? 'active' : ''}} transparent"
+                data-color=""
+                bindtap="selectStrokeColor"
+              >
+                <text class="transparent-text">无</text>
+              </view>
+            </view>
+          </view>
+
+          <view class="section" wx:if="{{strokeColor}}">
+            <view class="section-header">
+              <text class="section-title">描边宽度</text>
+              <text class="section-value">{{strokeWidth}}px</text>
+            </view>
+            <slider
+              class="section-slider"
+              min="1"
+              max="10"
+              value="{{strokeWidth}}"
+              block-size="28"
+              activeColor="#07c160"
+              backgroundColor="#e5e5e5"
+              bindchange="onStrokeWidthChange"
+            />
+          </view>
+
           <!-- 对齐方式 -->
           <view class="section">
             <view class="section-header">
