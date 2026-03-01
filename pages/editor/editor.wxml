@@ -40,20 +40,20 @@
         <text class="tab-text">文字</text>
       </view>
       <view
-        class="tab-item {{activeTab === 'template' ? 'active' : ''}}"
-        data-tab="template"
-        bindtap="switchTab"
-      >
-        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAybC0xLjkxMiA1LjgxM2EyIDIgMCAwIDEtMS4yNzUgMS4yNzVMMyAxMmw1LjgxMyAxLjkxMmEyIDIgMCAwIDEgMS4yNzUgMS4yNzVMMTIgMjFsMS45MTItNS44MTNhMiAyIDAgMCAxIDEuMjc1LTEuMjc1TDIxIDEybC01LjgxMy0xLjkxMmEyIDIgMCAwIDEtMS4yNzUtMS4yNzVMMTIgMloiLz48L3N2Zz4=" mode="aspectFit"/>
-        <text class="tab-text">模板</text>
-      </view>
-      <view
         class="tab-item {{activeTab === 'style' ? 'active' : ''}}"
         data-tab="style"
         bindtap="switchTab"
       >
         <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAyQzYuNSAyIDIgNi41IDIgMTJzNC41IDEwIDEwIDEwYy45MjYgMCAxLjY0OC0uNzQ2IDEuNjQ4LTEuNjg4IDAtLjQzNy0uMTgtLjgzNS0uNDM3LTEuMTI1LS4yOS0uMjg5LS40MzgtLjY1Mi0uNDM4LTEuMTI1YTEuNjQgMS42NCAwIDAgMSAxLjY2OC0xLjY2OGgxLjk5NmMzLjA1MSAwIDUuNTU1LTIuNTAzIDUuNTU1LTUuNTU0QzIxLjk2NSA2LjAxMiAxNy40NjEgMiAxMiAyeiIvPjwvc3ZnPg==" mode="aspectFit"/>
         <text class="tab-text">样式</text>
+      </view>
+      <view
+        class="tab-item {{activeTab === 'effect' ? 'active' : ''}}"
+        data-tab="effect"
+        bindtap="switchTab"
+      >
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAybC0xLjkxMiA1LjgxM2EyIDIgMCAwIDEtMS4yNzUgMS4yNzVMMyAxMmw1LjgxMyAxLjkxMmEyIDIgMCAwIDEgMS4yNzUgMS4yNzVMMTIgMjFsMS45MTItNS44MTNhMiAyIDAgMCAxIDEuMjc1LTEuMjc1TDIxIDEybC01LjgxMy0xLjkxMmEyIDIgMCAwIDEtMS4yNzUtMS4yNzVMMTIgMloiLz48L3N2Zz4=" mode="aspectFit"/>
+        <text class="tab-text">动效</text>
       </view>
       <view
         class="tab-item {{activeTab === 'setting' ? 'active' : ''}}"
@@ -129,66 +129,7 @@
         </view>
       </scroll-view>
 
-      <!-- Tab 2: 模板 -->
-      <scroll-view
-        class="tab-panel {{activeTab === 'template' ? 'show' : 'hide'}}"
-        scroll-y
-        enhanced
-        show-scrollbar
-      >
-        <view class="panel-inner">
-          <!-- 特效开关 -->
-          <view class="section">
-            <view class="section-header">
-              <text class="section-title">动画特效</text>
-              <switch checked="{{enableEffects}}" bindchange="toggleEffects" color="#07c160"/>
-            </view>
-            <text class="section-desc">开启后可以使用动画模板</text>
-          </view>
-
-          <!-- 动画速度 -->
-          <view class="section" wx:if="{{enableEffects}}">
-            <view class="section-header">
-              <text class="section-title">动画速度</text>
-              <text class="section-value">{{speed}}x</text>
-            </view>
-            <slider
-              class="section-slider"
-              min="0.25"
-              max="3"
-              step="0.25"
-              value="{{speed}}"
-              block-size="28"
-              activeColor="#07c160"
-              backgroundColor="#e5e5e5"
-              bindchange="onSpeedChange"
-            />
-          </view>
-
-          <!-- 模板列表 -->
-          <view class="section">
-            <view class="section-header">
-              <text class="section-title">选择模板</text>
-            </view>
-            <view class="template-grid">
-              <view
-                class="template-card {{selectedTemplate === item.id ? 'active' : ''}} {{!enableEffects ? 'disabled' : ''}}"
-                wx:for="{{templates}}"
-                wx:key="id"
-                data-id="{{item.id}}"
-                bindtap="selectTemplate"
-              >
-                <view class="template-icon-box" style="background: {{item.previewColor || '#f5f5f5'}}">
-                  <text class="template-icon">{{item.icon}}</text>
-                </view>
-                <text class="template-name">{{item.name}}</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </scroll-view>
-
-      <!-- Tab 3: 样式 -->
+      <!-- Tab 2: 样式 -->
       <scroll-view
         class="tab-panel {{activeTab === 'style' ? 'show' : 'hide'}}"
         scroll-y
@@ -312,6 +253,65 @@
               >
                 <image class="align-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxsaW5lIHgxPSIyMSIgeDI9IjMiIHkxPSI2IiB5Mj0iNiIvPjxsaW5lIHgxPSIyMSIgeDI9IjkiIHkxPSIxMiIgeTI9IjEyIi8+PGxpbmUgeDE9IjIxIiB4Mj0iNyIgeTE9IjE4IiB5Mj0iMTgiLz48L3N2Zz4=" mode="aspectFit"/>
                 <text class="align-label">右对齐</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- Tab 3: 动效 -->
+      <scroll-view
+        class="tab-panel {{activeTab === 'effect' ? 'show' : 'hide'}}"
+        scroll-y
+        enhanced
+        show-scrollbar
+      >
+        <view class="panel-inner">
+          <!-- 特效开关 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">动画特效</text>
+              <switch checked="{{enableEffects}}" bindchange="toggleEffects" color="#07c160"/>
+            </view>
+            <text class="section-desc">开启后可以使用动画动效</text>
+          </view>
+
+          <!-- 动画速度 -->
+          <view class="section" wx:if="{{enableEffects}}">
+            <view class="section-header">
+              <text class="section-title">动画速度</text>
+              <text class="section-value">{{speed}}x</text>
+            </view>
+            <slider
+              class="section-slider"
+              min="0.25"
+              max="3"
+              step="0.25"
+              value="{{speed}}"
+              block-size="28"
+              activeColor="#07c160"
+              backgroundColor="#e5e5e5"
+              bindchange="onSpeedChange"
+            />
+          </view>
+
+          <!-- 动效列表 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">选择动效</text>
+            </view>
+            <view class="template-grid">
+              <view
+                class="template-card {{selectedTemplate === item.id ? 'active' : ''}} {{!enableEffects ? 'disabled' : ''}}"
+                wx:for="{{templates}}"
+                wx:key="id"
+                data-id="{{item.id}}"
+                bindtap="selectTemplate"
+              >
+                <view class="template-icon-box" style="background: {{item.previewColor || '#f5f5f5'}}">
+                  <text class="template-icon">{{item.icon}}</text>
+                </view>
+                <text class="template-name">{{item.name}}</text>
               </view>
             </view>
           </view>

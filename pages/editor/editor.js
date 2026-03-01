@@ -5,7 +5,7 @@ const gifHelper = require('../../utils/gifHelper.js')
 Page({
   data: {
     // 当前 Tab
-    activeTab: 'text', // text | template | style | setting
+    activeTab: 'text', // text | style | effect | setting
 
     // 文字内容
     text: '你好',
