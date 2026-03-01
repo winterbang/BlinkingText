@@ -108,6 +108,24 @@
               </view>
             </view>
           </view>
+
+          <!-- 字体选择 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">字体</text>
+            </view>
+            <view class="font-list">
+              <view
+                class="font-item {{fontFamily === item.value ? 'active' : ''}}"
+                wx:for="{{fontFamilies}}"
+                wx:key="value"
+                data-value="{{item.value}}"
+                bindtap="selectFontFamily"
+              >
+                <text class="font-label" style="font-family: {{item.value}};">{{item.label}}</text>
+              </view>
+            </view>
+          </view>
         </view>
       </scroll-view>
 

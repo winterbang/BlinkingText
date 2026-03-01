@@ -49,12 +49,13 @@ function drawWrappedText(ctx, text, x, y, maxWidth, options = {}) {
     lineHeight = 1.2,
     isBold = false,
     strokeColor = '',
-    strokeWidth = 0
+    strokeWidth = 0,
+    fontFamily = 'sans-serif'
   } = options
 
   ctx.fillStyle = color
   const weight = isBold ? 'bold' : fontWeight
-  ctx.font = `${weight} ${fontSize}px sans-serif`
+  ctx.font = `${weight} ${fontSize}px ${fontFamily}`
   ctx.textBaseline = 'middle'
   ctx.textAlign = textAlign
 
@@ -101,7 +102,7 @@ const fadeTemplate = {
   icon: '✨',
   previewColor: '#fef3c7',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const midFrame = Math.floor(totalFrames / 2)
@@ -128,7 +129,7 @@ const fadeTemplate = {
       // 文字（支持换行）
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.globalAlpha = 1
 
@@ -149,7 +150,7 @@ const bounceTemplate = {
   icon: '⬆️',
   previewColor: '#d1fae5',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -167,7 +168,7 @@ const bounceTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2 - bounce, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2 - bounce, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       frames.push({
         data: canvas,
@@ -186,7 +187,7 @@ const scaleTemplate = {
   icon: '🔍',
   previewColor: '#dbeafe',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -208,7 +209,7 @@ const scaleTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -229,7 +230,7 @@ const rotateTemplate = {
   icon: '↻',
   previewColor: '#fce7f3',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -272,7 +273,7 @@ const typewriterTemplate = {
   icon: '⌨️',
   previewColor: '#e0e7ff',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const chars = text.split('')
@@ -292,7 +293,7 @@ const typewriterTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, currentText, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, currentText, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       frames.push({
         data: canvas,
@@ -311,7 +312,7 @@ const blinkTemplate = {
   icon: '✨',
   previewColor: '#fef9c3',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -350,7 +351,7 @@ const shakeTemplate = {
   icon: '📳',
   previewColor: '#fecaca',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -369,7 +370,7 @@ const shakeTemplate = {
 
       const x = textAlign === 'left' ? 40 + offsetX : textAlign === 'right' ? width - 40 + offsetX : width / 2 + offsetX
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2 + offsetY, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2 + offsetY, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       frames.push({
         data: canvas,
@@ -388,7 +389,7 @@ const rainbowTemplate = {
   icon: '🌈',
   previewColor: '#fce7f3',
   generateFrames(options) {
-    const { text, width, height, fontSize, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899']
@@ -407,7 +408,7 @@ const rainbowTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color: colors[colorIndex], textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color: colors[colorIndex], textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       frames.push({
         data: canvas,
@@ -426,7 +427,7 @@ const blurInTemplate = {
   icon: '🔍',
   previewColor: '#e0e7ff',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -445,7 +446,7 @@ const blurInTemplate = {
       ctx.filter = `blur(${blur}px)`
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       frames.push({
         data: canvas,
@@ -464,7 +465,7 @@ const danceTemplate = {
   icon: '💃',
   previewColor: '#fbcfe8',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -488,7 +489,7 @@ const danceTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -509,7 +510,7 @@ const elasticTemplate = {
   icon: '↔️',
   previewColor: '#fed7aa',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -531,7 +532,7 @@ const elasticTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -552,7 +553,7 @@ const energeticTemplate = {
   icon: '⚡',
   previewColor: '#fef3c7',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -576,7 +577,7 @@ const energeticTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -597,7 +598,7 @@ const explodeTemplate = {
   icon: '💥',
   previewColor: '#fecaca',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const chars = text.split('')
@@ -667,7 +668,7 @@ const flipTemplate = {
   icon: '🔃',
   previewColor: '#dbeafe',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -689,7 +690,7 @@ const flipTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -710,7 +711,7 @@ const glitchTemplate = {
   icon: '👾',
   previewColor: '#111827',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const glitchColors = ['#ff0000', '#00ff00', '#0000ff']
@@ -728,7 +729,7 @@ const glitchTemplate = {
       const maxTextWidth = width - 80
 
       // 绘制主文字
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       // 随机故障条纹
       if (Math.random() > 0.7) {
@@ -759,7 +760,7 @@ const jellyTemplate = {
   icon: '🍮',
   previewColor: '#fde68a',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -781,7 +782,7 @@ const jellyTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -802,7 +803,7 @@ const waveTemplate = {
   icon: '〰️',
   previewColor: '#bfdbfe',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const chars = text.split('')
@@ -865,7 +866,7 @@ const lightningTemplate = {
   icon: '⚡',
   previewColor: '#fef9c3',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -890,7 +891,7 @@ const lightningTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -911,7 +912,7 @@ const liquidTemplate = {
   icon: '💧',
   previewColor: '#a5f3fc',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -936,7 +937,7 @@ const liquidTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -957,7 +958,7 @@ const morphWaveTemplate = {
   icon: '🌊',
   previewColor: '#c7d2fe',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -983,7 +984,7 @@ const morphWaveTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1004,7 +1005,7 @@ const neonPulseTemplate = {
   icon: '🌟',
   previewColor: '#1f2937',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const neonColors = ['#ff00ff', '#00ffff', '#ff0080', '#80ff00', '#ff8000']
@@ -1054,7 +1055,7 @@ const pendulumTemplate = {
   icon: '🕰️',
   previewColor: '#d1d5db',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1078,7 +1079,7 @@ const pendulumTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1099,7 +1100,7 @@ const pixelateTemplate = {
   icon: '👾',
   previewColor: '#86efac',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1119,7 +1120,7 @@ const pixelateTemplate = {
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
 
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       // 应用像素化效果（模拟）
       if (pixelSize > 1) {
@@ -1163,7 +1164,7 @@ const popTemplate = {
   icon: '🎉',
   previewColor: '#fbcfe8',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1193,7 +1194,7 @@ const popTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1214,7 +1215,7 @@ const slideRightTemplate = {
   icon: '⬅️',
   previewColor: '#e9d5ff',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1236,7 +1237,7 @@ const slideRightTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1257,7 +1258,7 @@ const slideLeftTemplate = {
   icon: '➡️',
   previewColor: '#bae6fd',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1279,7 +1280,7 @@ const slideLeftTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1300,7 +1301,7 @@ const slideUpTemplate = {
   icon: '⬆️',
   previewColor: '#bbf7d0',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1322,7 +1323,7 @@ const slideUpTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1343,7 +1344,7 @@ const rotate3dTemplate = {
   icon: '🔄',
   previewColor: '#ddd6fe',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1366,7 +1367,7 @@ const rotate3dTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1387,7 +1388,7 @@ const colorFillTemplate = {
   icon: '🎨',
   previewColor: '#fde047',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
     const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', color]
@@ -1407,7 +1408,7 @@ const colorFillTemplate = {
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color: currentColor, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color: currentColor, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       frames.push({
         data: canvas,
@@ -1426,7 +1427,7 @@ const swingTemplate = {
   icon: '🎭',
   previewColor: '#fed7aa',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1448,7 +1449,7 @@ const swingTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1469,7 +1470,7 @@ const waveDistortTemplate = {
   icon: '〰️',
   previewColor: '#99f6e4',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1494,7 +1495,7 @@ const waveDistortTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1515,7 +1516,7 @@ const jitterTemplate = {
   icon: '📳',
   previewColor: '#fca5a5',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1539,7 +1540,7 @@ const jitterTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
@@ -1560,7 +1561,7 @@ const zigzagTemplate = {
   icon: '⚡',
   previewColor: '#fde68a',
   generateFrames(options) {
-    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth } = options
+    const { text, width, height, fontSize, color, backgroundColor, fps, duration, textAlign, isBold, strokeColor, strokeWidth, fontFamily = 'sans-serif' } = options
     const frames = []
     const totalFrames = Math.max(1, Math.round((duration / 1000) * fps))
 
@@ -1585,7 +1586,7 @@ const zigzagTemplate = {
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
       const maxTextWidth = width - 80
-      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth })
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign, isBold, strokeColor, strokeWidth, fontFamily })
 
       ctx.restore()
 
