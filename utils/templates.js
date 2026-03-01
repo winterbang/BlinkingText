@@ -10,6 +10,61 @@ function createCanvasContext(width, height) {
   })
 }
 
+// 文字换行处理（支持手动换行和自动换行）
+function wrapText(ctx, text, maxWidth) {
+  const paragraphs = text.split('\n')
+  const allLines = []
+
+  for (const paragraph of paragraphs) {
+    const chars = paragraph.split('')
+    const lines = []
+    let currentLine = ''
+
+    for (let i = 0; i < chars.length; i++) {
+      const testLine = currentLine + chars[i]
+      const metrics = ctx.measureText(testLine)
+
+      if (metrics.width > maxWidth && currentLine !== '') {
+        lines.push(currentLine)
+        currentLine = chars[i]
+      } else {
+        currentLine = testLine
+      }
+    }
+
+    lines.push(currentLine)
+    allLines.push(...lines)
+  }
+
+  return allLines
+}
+
+// 绘制多行文字（支持换行）
+function drawWrappedText(ctx, text, x, y, maxWidth, options = {}) {
+  const {
+    fontSize = 48,
+    color = '#000000',
+    textAlign = 'center',
+    fontWeight = 'normal',
+    lineHeight = 1.2
+  } = options
+
+  ctx.fillStyle = color
+  ctx.font = `${fontWeight} ${fontSize}px sans-serif`
+  ctx.textBaseline = 'middle'
+  ctx.textAlign = textAlign
+
+  const lines = wrapText(ctx, text, maxWidth)
+  const lh = fontSize * lineHeight
+  const totalHeight = lines.length * lh
+  const startY = y - totalHeight / 2 + lh / 2
+
+  lines.forEach((line, index) => {
+    ctx.fillText(line, x, startY + index * lh)
+  })
+}
+
+// 绘制单行文字（用于简单场景）
 function drawText(ctx, text, x, y, options = {}) {
   const {
     fontSize = 48,
@@ -56,9 +111,10 @@ const fadeTemplate = {
 
       ctx.globalAlpha = alpha
 
-      // 文字
+      // 文字（支持换行）
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
-      drawText(ctx, text, x, height / 2, { fontSize, color, textAlign })
+      const maxTextWidth = width - 80
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign })
 
       ctx.globalAlpha = 1
 
@@ -96,7 +152,8 @@ const bounceTemplate = {
       }
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
-      drawText(ctx, text, x, height / 2 - bounce, { fontSize, color, textAlign })
+      const maxTextWidth = width - 80
+      drawWrappedText(ctx, text, x, height / 2 - bounce, maxTextWidth, { fontSize, color, textAlign })
 
       frames.push({
         data: canvas,
@@ -136,7 +193,8 @@ const scaleTemplate = {
       ctx.scale(scale, scale)
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
-      drawText(ctx, text, x, 0, { fontSize, color, textAlign })
+      const maxTextWidth = width - 80
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign })
 
       ctx.restore()
 
@@ -178,7 +236,8 @@ const rotateTemplate = {
       ctx.rotate(rotation)
 
       const x = textAlign === 'left' ? -width / 2 + 40 : textAlign === 'right' ? width / 2 - 40 : 0
-      drawText(ctx, text, x, 0, { fontSize, color, textAlign })
+      const maxTextWidth = width - 80
+      drawWrappedText(ctx, text, x, 0, maxTextWidth, { fontSize, color, textAlign })
 
       ctx.restore()
 
@@ -218,7 +277,8 @@ const typewriterTemplate = {
       }
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
-      drawText(ctx, currentText, x, height / 2, { fontSize, color, textAlign })
+      const maxTextWidth = width - 80
+      drawWrappedText(ctx, currentText, x, height / 2, maxTextWidth, { fontSize, color, textAlign })
 
       frames.push({
         data: canvas,
@@ -255,7 +315,8 @@ const blinkTemplate = {
 
       ctx.globalAlpha = alpha
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
-      drawText(ctx, text, x, height / 2, { fontSize, color, textAlign })
+      const maxTextWidth = width - 80
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color, textAlign })
       ctx.globalAlpha = 1
 
       frames.push({
@@ -293,7 +354,8 @@ const shakeTemplate = {
       }
 
       const x = textAlign === 'left' ? 40 + offsetX : textAlign === 'right' ? width - 40 + offsetX : width / 2 + offsetX
-      drawText(ctx, text, x, height / 2 + offsetY, { fontSize, color, textAlign })
+      const maxTextWidth = width - 80
+      drawWrappedText(ctx, text, x, height / 2 + offsetY, maxTextWidth, { fontSize, color, textAlign })
 
       frames.push({
         data: canvas,
@@ -330,7 +392,8 @@ const rainbowTemplate = {
       }
 
       const x = textAlign === 'left' ? 40 : textAlign === 'right' ? width - 40 : width / 2
-      drawText(ctx, text, x, height / 2, { fontSize, color: colors[colorIndex], textAlign })
+      const maxTextWidth = width - 80
+      drawWrappedText(ctx, text, x, height / 2, maxTextWidth, { fontSize, color: colors[colorIndex], textAlign })
 
       frames.push({
         data: canvas,
