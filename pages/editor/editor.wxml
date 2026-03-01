@@ -79,12 +79,12 @@
           <view class="section">
             <view class="section-header">
               <text class="section-title">文字内容</text>
-              <text class="word-count">{{text.length}}/50</text>
+              <text class="word-count">{{text.length}}/20</text>
             </view>
             <textarea
               class="text-input"
               placeholder="请输入文字内容"
-              maxlength="50"
+              maxlength="20"
               auto-height
               value="{{text}}"
               bindinput="onTextInput"
@@ -105,6 +105,44 @@
                 data-text="{{item}}"
               >
                 {{item}}
+              </view>
+            </view>
+          </view>
+
+          <!-- 字号大小 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">字号大小</text>
+              <text class="section-value">{{fontSize}}px</text>
+            </view>
+            <slider
+              class="section-slider"
+              min="24"
+              max="120"
+              value="{{fontSize}}"
+              block-size="28"
+              activeColor="#07c160"
+              backgroundColor="#e5e5e5"
+              bindchange="onFontSizeChange"
+            />
+          </view>
+
+          <!-- 文字颜色 -->
+          <view class="section">
+            <view class="section-header">
+              <text class="section-title">文字颜色</text>
+            </view>
+            <view class="color-grid">
+              <view
+                class="color-block {{color === item ? 'active' : ''}}"
+                wx:for="{{presetColors}}"
+                wx:key="*this"
+                style="background: {{item}}"
+                data-color="{{item}}"
+                bindtap="selectColor"
+              />
+              <view class="color-block custom" bindtap="openColorPicker">
+                <text>+</text>
               </view>
             </view>
           </view>
@@ -192,44 +230,6 @@
         show-scrollbar
       >
         <view class="panel-inner">
-          <!-- 字号 -->
-          <view class="section">
-            <view class="section-header">
-              <text class="section-title">字号大小</text>
-              <text class="section-value">{{fontSize}}px</text>
-            </view>
-            <slider
-              class="section-slider"
-              min="24"
-              max="120"
-              value="{{fontSize}}"
-              block-size="28"
-              activeColor="#07c160"
-              backgroundColor="#e5e5e5"
-              bindchange="onFontSizeChange"
-            />
-          </view>
-
-          <!-- 文字颜色 -->
-          <view class="section">
-            <view class="section-header">
-              <text class="section-title">文字颜色</text>
-            </view>
-            <view class="color-grid">
-              <view
-                class="color-block {{color === item ? 'active' : ''}}"
-                wx:for="{{presetColors}}"
-                wx:key="*this"
-                style="background: {{item}}"
-                data-color="{{item}}"
-                bindtap="selectColor"
-              />
-              <view class="color-block custom" bindtap="openColorPicker">
-                <text>+</text>
-              </view>
-            </view>
-          </view>
-
           <!-- 背景颜色 -->
           <view class="section">
             <view class="section-header">
