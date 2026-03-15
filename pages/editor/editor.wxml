@@ -414,11 +414,11 @@
             min="0"
             max="360"
             value="{{hueValue}}"
-            block-size="28"
+            block-size="32"
+            block-color="#ffffff"
             backgroundColor="transparent"
             activeColor="transparent"
             bindchange="onHueChange"
-            bindchanging="onHueChange"
           />
         </view>
         <text class="hue-value">色相: {{hueValue}}°</text>

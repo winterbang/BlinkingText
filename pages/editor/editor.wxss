@@ -688,10 +688,12 @@
 
 .hue-slider-wrapper {
   position: relative;
-  height: 60rpx;
-  border-radius: 30rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
   overflow: hidden;
   margin-bottom: 16rpx;
+  display: flex;
+  align-items: center;
 }
 
 .hue-gradient {
@@ -709,12 +711,16 @@
     #ff00ff 83.33%,
     #ff0000 100%
   );
-  border-radius: 30rpx;
+  border-radius: 40rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
 }
 
 .hue-slider {
   position: relative;
   z-index: 1;
+  width: 100%;
+  height: 80rpx;
   margin: 0 !important;
 }
 
