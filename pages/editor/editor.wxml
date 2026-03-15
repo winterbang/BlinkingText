@@ -382,19 +382,53 @@
 
   <!-- 颜色选择器弹窗 -->
   <view class="modal-mask" wx:if="{{showColorPicker}}" bindtap="closeColorPicker"></view>
-  <view class="modal-content" wx:if="{{showColorPicker}}">
+  <view class="modal-content color-picker-modal" wx:if="{{showColorPicker}}">
     <view class="modal-header">
       <text class="modal-title">选择颜色</text>
       <text class="modal-close" bindtap="closeColorPicker">×</text>
     </view>
     <view class="modal-body">
-      <input
-        type="text"
-        placeholder="输入颜色代码，如 #07c160"
-        value="{{customColor}}"
-        bindinput="onCustomColorInput"
-      />
-      <button class="btn-confirm" bindtap="confirmCustomColor">确定</button>
+      <!-- 颜色预览和HEX输入 -->
+      <view class="color-preview-section">
+        <view class="color-preview-box" style="background-color: {{previewColor}};"></view>
+        <view class="color-value-section">
+          <text class="color-label">HEX</text>
+          <input
+            class="color-hex-input"
+            type="text"
+            maxlength="7"
+            value="{{previewColor}}"
+            bindinput="onHexInput"
+            bindblur="onHexBlur"
+          />
+        </view>
+      </view>
+
+      <!-- 色相滑块 -->
+      <view class="hue-slider-section">
+        <text class="slider-label">滑动选择颜色</text>
+        <view class="hue-slider-wrapper">
+          <view class="hue-gradient"></view>
+          <slider
+            class="hue-slider"
+            min="0"
+            max="360"
+            value="{{hueValue}}"
+            block-size="28"
+            backgroundColor="transparent"
+            activeColor="transparent"
+            bindchange="onHueChange"
+            bindchanging="onHueChange"
+          />
+        </view>
+        <text class="hue-value">色相: {{hueValue}}°</text>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="picker-actions">
+        <button class="btn-cancel" bindtap="closeColorPicker">取消</button>
+        <button class="btn-confirm" bindtap="confirmColorPicker" style="background-color: {{previewColor}};">确定</button>
+      </view>
     </view>
   </view>
 </view>

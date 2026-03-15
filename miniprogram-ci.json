@@ -1,0 +1,21 @@
+{
+  "miniprogram": {
+    "appid": "wx7e6327759894f230",
+    "projectPath": "/home/jiliang/projects/BlinkingText",
+    "privateKeyPath": "~/.wechat/keys/wx7e6327759894f230.key"
+  },
+  "build": {
+    "outputDir": "./dist",
+    "minify": true,
+    "sourceMap": true
+  },
+  "deploy": {
+    "robot": 1,
+    "setting": {
+      "es6": true,
+      "enhance": true,
+      "minified": true,
+      "uglifyFileName": false
+    }
+  }
+}

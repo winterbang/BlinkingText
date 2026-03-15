@@ -626,3 +626,131 @@
 .btn-confirm::after {
   border: none;
 }
+
+/* ==================== 颜色选择器弹窗 ==================== */
+.color-picker-modal {
+  max-height: 70vh;
+}
+
+.color-preview-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+  gap: 24rpx;
+}
+
+.color-preview-box {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 16rpx;
+  border: 4rpx solid #e5e5e5;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
+.color-value-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.color-label {
+  font-size: 24rpx;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+}
+
+.color-hex-input {
+  width: 100% !important;
+  padding: 20rpx 24rpx !important;
+  background: #f5f5f5 !important;
+  border-radius: 12rpx !important;
+  font-size: 32rpx !important;
+  font-family: monospace !important;
+  font-weight: 600 !important;
+  letter-spacing: 2rpx !important;
+  margin-bottom: 0 !important;
+  box-sizing: border-box;
+}
+
+/* 色相滑块 */
+.hue-slider-section {
+  margin-bottom: 40rpx;
+}
+
+.hue-slider-section .slider-label {
+  display: block;
+  font-size: 28rpx;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.hue-slider-wrapper {
+  position: relative;
+  height: 60rpx;
+  border-radius: 30rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+}
+
+.hue-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right,
+    #ff0000 0%,
+    #ffff00 16.66%,
+    #00ff00 33.33%,
+    #00ffff 50%,
+    #0000ff 66.66%,
+    #ff00ff 83.33%,
+    #ff0000 100%
+  );
+  border-radius: 30rpx;
+}
+
+.hue-slider {
+  position: relative;
+  z-index: 1;
+  margin: 0 !important;
+}
+
+.hue-value {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* 操作按钮 */
+.picker-actions {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 20rpx;
+}
+
+.btn-cancel {
+  flex: 1;
+  height: 88rpx;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 32rpx;
+  border-radius: 12rpx;
+}
+
+.btn-cancel::after {
+  border: none;
+}
+
+.picker-actions .btn-confirm {
+  flex: 1;
+  height: 88rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  border-radius: 12rpx;
+  border: none;
+  transition: background-color 0.2s;
+}

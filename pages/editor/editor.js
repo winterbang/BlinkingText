@@ -52,6 +52,8 @@ Page({
     progress: 0,
     showColorPicker: false,
     customColor: '',
+    previewColor: '#000000',
+    hueValue: 0,
     lastExportPath: '',
 
     // Canvas
@@ -381,24 +383,63 @@ Page({
 
   // 打开颜色选择器
   openColorPicker() {
-    this.setData({ showColorPicker: true })
+    const color = this.data.color
+    const hue = this.hexToHue(color)
+    this.setData({
+      showColorPicker: true,
+      previewColor: color,
+      hueValue: hue
+    })
   },
 
   closeColorPicker() {
     this.setData({ showColorPicker: false })
   },
 
-  onCustomColorInput(e) {
-    this.setData({ customColor: e.detail.value })
+  // 色相滑块变化 (0-360)
+  onHueChange(e) {
+    const hue = e.detail.value
+    const color = this.hueToHex(hue)
+    this.setData({
+      hueValue: hue,
+      previewColor: color
+    })
   },
 
-  confirmCustomColor() {
-    const color = this.data.customColor
-    if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+  // HEX 输入框变化
+  onHexInput(e) {
+    let hex = e.detail.value
+    // 自动添加 #
+    if (hex && !hex.startsWith('#')) {
+      hex = '#' + hex
+    }
+    this.setData({ previewColor: hex })
+  },
+
+  onHexBlur(e) {
+    let hex = e.detail.value
+    // 验证并修正颜色值
+    if (!this.isValidHex(hex)) {
+      // 如果不合法，恢复之前的值
+      hex = this.data.color
+    } else {
+      // 标准化为大写
+      hex = hex.toUpperCase()
+    }
+    const hue = this.hexToHue(hex)
+    this.setData({
+      previewColor: hex,
+      hueValue: hue
+    })
+  },
+
+  // 确认颜色选择
+  confirmColorPicker() {
+    const color = this.data.previewColor
+    if (this.isValidHex(color)) {
       this.setData({
-        color,
-        showColorPicker: false,
-        customColor: ''
+        color: color.toUpperCase(),
+        showColorPicker: false
       })
       this.generatePreview()
     } else {
@@ -407,6 +448,74 @@ Page({
         icon: 'none'
       })
     }
+  },
+
+  // 验证 HEX 颜色格式
+  isValidHex(hex) {
+    return /^#[0-9A-Fa-f]{6}$/.test(hex)
+  },
+
+  // 色相 (0-360) 转 HEX
+  hueToHex(hue) {
+    const s = 100 // 饱和度
+    const l = 50  // 亮度
+    
+    const c = (1 - Math.abs(2 * l / 100 - 1)) * s / 100
+    const x = c * (1 - Math.abs((hue / 60) % 2 - 1))
+    const m = l / 100 - c / 2
+    
+    let r, g, b
+    
+    if (hue >= 0 && hue < 60) {
+      r = c; g = x; b = 0
+    } else if (hue >= 60 && hue < 120) {
+      r = x; g = c; b = 0
+    } else if (hue >= 120 && hue < 180) {
+      r = 0; g = c; b = x
+    } else if (hue >= 180 && hue < 240) {
+      r = 0; g = x; b = c
+    } else if (hue >= 240 && hue < 300) {
+      r = x; g = 0; b = c
+    } else {
+      r = c; g = 0; b = x
+    }
+    
+    const toHex = (n) => {
+      const hex = Math.round((n + m) * 255).toString(16)
+      return hex.length === 1 ? '0' + hex : hex
+    }
+    
+    return '#' + toHex(r) + toHex(g) + toHex(b).toUpperCase()
+  },
+
+  // HEX 转色相 (0-360)
+  hexToHue(hex) {
+    if (!hex || typeof hex !== 'string') return 0
+    
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+    if (!result) return 0
+    
+    const r = parseInt(result[1], 16) / 255
+    const g = parseInt(result[2], 16) / 255
+    const b = parseInt(result[3], 16) / 255
+    
+    const max = Math.max(r, g, b)
+    const min = Math.min(r, g, b)
+    const diff = max - min
+    
+    let hue = 0
+    
+    if (diff === 0) {
+      hue = 0
+    } else if (max === r) {
+      hue = ((g - b) / diff + 6) % 6 * 60
+    } else if (max === g) {
+      hue = ((b - r) / diff + 2) * 60
+    } else {
+      hue = ((r - g) / diff + 4) * 60
+    }
+    
+    return Math.round(hue)
   },
 
   // 切换加粗
